@@ -24,8 +24,8 @@
       <file leaf-file-name="musics.json" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/source/_data/musics.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="3" column="33" lean-forward="false" selection-start-line="3" selection-start-column="25" selection-end-line="3" selection-end-column="33" />
+            <state relative-caret-position="350">
+              <caret line="14" column="71" lean-forward="false" selection-start-line="14" selection-start-column="71" selection-end-line="14" selection-end-column="71" />
               <folding />
             </state>
           </provider>
@@ -91,7 +91,6 @@
         <option value="$PROJECT_DIR$/source/tags/index.md" />
         <option value="$PROJECT_DIR$/source/categories/index.md" />
         <option value="$PROJECT_DIR$/_config.yml" />
-        <option value="$PROJECT_DIR$/source/_data/musics.json" />
         <option value="$PROJECT_DIR$/source/_posts/zuop1.md" />
         <option value="$PROJECT_DIR$/source/_posts/hello-world.md" />
         <option value="$PROJECT_DIR$/source/_data/friends.json" />
@@ -101,6 +100,7 @@
         <option value="$PROJECT_DIR$/themes/hexo-theme-matery-master/_config.yml" />
         <option value="$PROJECT_DIR$/source/_posts/demo/demo.md" />
         <option value="$PROJECT_DIR$/themes/hexo-theme-matery-master/layout/_partial/footer.ejs" />
+        <option value="$PROJECT_DIR$/source/_data/musics.json" />
       </list>
     </option>
   </component>
@@ -333,12 +333,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1556163129708</updated>
-      <workItem from="1556163133549" duration="8178000" />
+      <workItem from="1556163133549" duration="9173000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="8178000" />
+    <option name="totallyTimeSpent" value="9173000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -653,8 +653,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/source/_data/musics.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="3" column="33" lean-forward="false" selection-start-line="3" selection-start-column="25" selection-end-line="3" selection-end-column="33" />
+        <state relative-caret-position="350">
+          <caret line="14" column="71" lean-forward="false" selection-start-line="14" selection-start-column="71" selection-end-line="14" selection-end-column="71" />
           <folding />
         </state>
       </provider>
