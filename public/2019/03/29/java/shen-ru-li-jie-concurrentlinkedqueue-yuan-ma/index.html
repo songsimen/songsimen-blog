@@ -1,0 +1,1045 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="并发编程-深入理解ConcurrentLinkedQueue源码, UI,PS,AI,C4D">
+    <meta name="description" content="概述
+ConcurrentLinkedQueue是一个基于链接节点的无边界的线程安全队列，它采用先进先出原则对元素进行排序，插入元素放入队列尾部，出队时从队列头部返回元素，利用CAS方式实现的
+ConcurrentLinkedQueue的结">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>并发编程-深入理解ConcurrentLinkedQueue源码 | mengc</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    <style type="text/css">
+        
+    </style>
+
+    <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+
+<header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">mengc</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fa fa-navicon"></i></a>
+<ul class="right">
+    
+    <li class="hide-on-med-and-down">
+        <a href="/" class="waves-effect waves-light">
+            
+            <i class="fa fa-home"></i>
+            
+            <span>首页</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/tags" class="waves-effect waves-light">
+            
+            <i class="fa fa-tags"></i>
+            
+            <span>标签</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories" class="waves-effect waves-light">
+            
+            <i class="fa fa-bookmark"></i>
+            
+            <span>分类</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/archives" class="waves-effect waves-light">
+            
+            <i class="fa fa-archive"></i>
+            
+            <span>归档</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/about" class="waves-effect waves-light">
+            
+            <i class="fa fa-user-circle-o"></i>
+            
+            <span>关于</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/friends" class="waves-effect waves-light">
+            
+            <i class="fa fa-address-book"></i>
+            
+            <span>友情链接</span>
+        </a>
+    </li>
+    
+    <li>
+        <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+            <i id="searchIcon" class="fa fa-search" title="搜索"></i>
+        </a>
+    </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">mengc</div>
+        <div class="logo-desc">
+            
+            为设计而生,做用户最好的伙伴.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li>
+            <a href="/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-home"></i>
+                
+                首页
+            </a>
+        </li>
+        
+        <li>
+            <a href="/tags" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-tags"></i>
+                
+                标签
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-bookmark"></i>
+                
+                分类
+            </a>
+        </li>
+        
+        <li>
+            <a href="/archives" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-archive"></i>
+                
+                归档
+            </a>
+        </li>
+        
+        <li>
+            <a href="/about" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-user-circle-o"></i>
+                
+                关于
+            </a>
+        </li>
+        
+        <li>
+            <a href="/friends" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-address-book"></i>
+                
+                友情链接
+            </a>
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light" target="_blank">
+                <i class="fa fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/blinkfox/hexo-theme-matery" class="github-corner tooltipped hide-on-med-and-down" target="_blank" data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewbox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/20.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        并发编程-深入理解ConcurrentLinkedQueue源码
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 20px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/ConcurrentLinkedQueue/" target="_blank">
+                                <span class="chip bg-color">ConcurrentLinkedQueue</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fa fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/并发编程/" class="post-category" target="_blank">
+                                并发编程
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                <div class="post-date info-break-policy">
+                    <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2019-03-29
+                </div>
+
+                
+				
+				
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="fa fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><ul>
+<li><code>ConcurrentLinkedQueue</code>是一个基于链接节点的无边界的线程安全队列，它采用先进先出原则对元素进行排序，插入元素放入队列尾部，出队时从队列头部返回元素，利用CAS方式实现的</li>
+<li><code>ConcurrentLinkedQueue</code>的结构由头节点和尾节点组成的，都是使用<code>volatile</code>修饰的。每个节点由节点元素<code>item</code>和指向下一个节点的<code>next</code>引用组成，组成一张链表结构。</li>
+<li><code>ConcurrentLinkedQueue</code>继承自<code>AbstractQueue</code>类，实现<code>Queue</code>接口</li>
+</ul>
+<h2 id="常用方法"><a href="#常用方法" class="headerlink" title="常用方法"></a>常用方法</h2><ul>
+<li><code>boolean    add(E e)</code> 将指定元素插入此队列的尾部，当队列满时，抛出异常<ul>
+<li><code>boolean    contains(Object o)</code> 判断队列是否包含次元素</li>
+</ul>
+</li>
+<li><code>boolean    isEmpty()</code> 判断队列是否为空 <ul>
+<li><code>boolean    offer(E e)</code>  将元素插入队列尾部，当队列满时返回false</li>
+<li><code>E    peek()</code>     获取队列头部元素但不删除</li>
+<li><code>E    poll()</code>   获取队列头部元素，并删除</li>
+<li><code>boolean    remove(Object o)</code> 从队列中移指定元素</li>
+</ul>
+</li>
+<li><code>int    size()</code>  返回此队列中的元素数量,需要遍历一遍集合。判断队列是否为空时，不推荐此方法</li>
+</ul>
+<h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 头节点</span>
+ <span class="token keyword">private</span> <span class="token keyword">transient</span> <span class="token keyword">volatile</span> Node<span class="token operator">&lt;</span>E<span class="token operator">></span> head<span class="token punctuation">;</span>
+ <span class="token comment" spellcheck="true">//尾节点</span>
+ <span class="token keyword">private</span> <span class="token keyword">transient</span> <span class="token keyword">volatile</span> Node<span class="token operator">&lt;</span>E<span class="token operator">></span> tail<span class="token punctuation">;</span>
+
+ <span class="token keyword">public</span> <span class="token function">ConcurrentLinkedQueue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+         <span class="token comment" spellcheck="true">//初始化构造时 头结点等于尾结点</span>
+        head <span class="token operator">=</span> tail <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Node</span><span class="token operator">&lt;</span>E<span class="token operator">></span><span class="token punctuation">(</span>null<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+ <span class="token comment" spellcheck="true">//创建一个最初包含给定 collection 元素的 ConcurrentLinkedQueue，按照此 collection 迭代器的遍历顺序来添加元素。</span>
+ <span class="token keyword">public</span> <span class="token function">ConcurrentLinkedQueue</span><span class="token punctuation">(</span>Collection<span class="token operator">&lt;</span><span class="token operator">?</span> <span class="token keyword">extends</span> <span class="token class-name">E</span><span class="token operator">></span> c<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        Node<span class="token operator">&lt;</span>E<span class="token operator">></span> h <span class="token operator">=</span> null<span class="token punctuation">,</span> t <span class="token operator">=</span> null<span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span>E e <span class="token operator">:</span> c<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token function">checkNotNull</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            Node<span class="token operator">&lt;</span>E<span class="token operator">></span> newNode <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Node</span><span class="token operator">&lt;</span>E<span class="token operator">></span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>h <span class="token operator">==</span> null<span class="token punctuation">)</span>
+                h <span class="token operator">=</span> t <span class="token operator">=</span> newNode<span class="token punctuation">;</span>
+            <span class="token keyword">else</span> <span class="token punctuation">{</span>
+                t<span class="token punctuation">.</span><span class="token function">lazySetNext</span><span class="token punctuation">(</span>newNode<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                t <span class="token operator">=</span> newNode<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>h <span class="token operator">==</span> null<span class="token punctuation">)</span>
+            h <span class="token operator">=</span> t <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Node</span><span class="token operator">&lt;</span>E<span class="token operator">></span><span class="token punctuation">(</span>null<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        head <span class="token operator">=</span> h<span class="token punctuation">;</span>
+        tail <span class="token operator">=</span> t<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+  <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">Node</span><span class="token operator">&lt;</span>E<span class="token operator">></span> <span class="token punctuation">{</span>
+    <span class="token keyword">volatile</span> E item<span class="token punctuation">;</span>
+    <span class="token keyword">volatile</span> Node<span class="token operator">&lt;</span>E<span class="token operator">></span> next<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">//构造一个新节点</span>
+   <span class="token function">Node</span><span class="token punctuation">(</span>E item<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            UNSAFE<span class="token punctuation">.</span><span class="token function">putObject</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> itemOffset<span class="token punctuation">,</span> item<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">boolean</span> <span class="token function">casItem</span><span class="token punctuation">(</span>E cmp<span class="token punctuation">,</span> E val<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+           <span class="token keyword">return</span> UNSAFE<span class="token punctuation">.</span><span class="token function">compareAndSwapObject</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> itemOffset<span class="token punctuation">,</span> cmp<span class="token punctuation">,</span> val<span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token punctuation">}</span>
+     <span class="token keyword">void</span> <span class="token function">lazySetNext</span><span class="token punctuation">(</span>Node<span class="token operator">&lt;</span>E<span class="token operator">></span> val<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+     UNSAFE<span class="token punctuation">.</span><span class="token function">putOrderedObject</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> nextOffset<span class="token punctuation">,</span> val<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+    <span class="token keyword">boolean</span> <span class="token function">casNext</span><span class="token punctuation">(</span>Node<span class="token operator">&lt;</span>E<span class="token operator">></span> cmp<span class="token punctuation">,</span> Node<span class="token operator">&lt;</span>E<span class="token operator">></span> val<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> UNSAFE<span class="token punctuation">.</span><span class="token function">compareAndSwapObject</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> nextOffset<span class="token punctuation">,</span> cmp<span class="token punctuation">,</span> val<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+ <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> sun<span class="token punctuation">.</span>misc<span class="token punctuation">.</span>Unsafe UNSAFE<span class="token punctuation">;</span>
+ <span class="token comment" spellcheck="true">//当前结点的偏移量</span>
+ <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">long</span> itemOffset<span class="token punctuation">;</span>
+ <span class="token comment" spellcheck="true">//下一个结点的偏移量</span>
+ <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">long</span> nextOffset<span class="token punctuation">;</span>
+     <span class="token keyword">static</span> <span class="token punctuation">{</span>
+            <span class="token keyword">try</span> <span class="token punctuation">{</span>
+                UNSAFE <span class="token operator">=</span> sun<span class="token punctuation">.</span>misc<span class="token punctuation">.</span>Unsafe<span class="token punctuation">.</span><span class="token function">getUnsafe</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                Class<span class="token operator">&lt;</span><span class="token operator">?</span><span class="token operator">></span> k <span class="token operator">=</span> Node<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">;</span>
+                itemOffset <span class="token operator">=</span> UNSAFE<span class="token punctuation">.</span><span class="token function">objectFieldOffset</span>
+                    <span class="token punctuation">(</span>k<span class="token punctuation">.</span><span class="token function">getDeclaredField</span><span class="token punctuation">(</span><span class="token string">"item"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                nextOffset <span class="token operator">=</span> UNSAFE<span class="token punctuation">.</span><span class="token function">objectFieldOffset</span>
+                    <span class="token punctuation">(</span>k<span class="token punctuation">.</span><span class="token function">getDeclaredField</span><span class="token punctuation">(</span><span class="token string">"next"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+</code></pre>
+<h3 id="offer入队操作"><a href="#offer入队操作" class="headerlink" title="offer入队操作"></a>offer入队操作</h3><h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><ul>
+<li>初始化操作就是创建一个新结点，并且<code>head</code>和<code>tail</code>相等,结点的数据域为空。<br><img src="https://img-blog.csdnimg.cn/20190328214940402.png" alt="初始化操作"></li>
+<li>当第一次入队操作时，检查插入的值是否为空，为空则抛空指针，然后用当前的值创建一个新<code>Node</code>结点。然后执行死循环开始入队操作<br><img src="https://img-blog.csdnimg.cn/20190328220017332.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAzOTEzNDI=,size_16,color_FFFFFF,t_70" alt="死循环入队操作"></li>
+<li>首先定义了两个指针<code>p和t</code>,都指向<code>tail</code></li>
+<li>然后定义<code>q</code>结点存储<code>p</code>的next指向的结点,此时p的next是为空没有结点的<br><img src="https://img-blog.csdnimg.cn/20190328220810259.png" alt="q指向p的next"></li>
+<li>此时<code>q==null</code> 条件成立。执行<code>p.casNext(null, newNode)</code>.以cas方式把p的下一个节点指向新创建出来的结点，然后往下执行,<code>p=t</code> 直接返回true。此时初始化构造的结点的next指向第一次入队成功的结点<br><img src="https://img-blog.csdnimg.cn/2019032822184113.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAzOTEzNDI=,size_16,color_FFFFFF,t_70" alt="第一次入队成功结构"></li>
+<li>第二次入队操作，首先也是非空检查，然后创建一个新结点。此时死循环入队操作。定义了两个指针<code>p和t</code>,都指向<code>tail</code>。定义<code>q</code>结点存储<code>p</code>的next指向的结点,此时p的next是不为空的，指向了上面创建的结点。所以<code>q==null</code>不成立。执行else操作</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20190328222604551.png" alt="第二次入队q==null不成立"></p>
+<ul>
+<li>此时<code>p</code>也不等于<code>q</code>。<code>p！=t</code>不成立，p和t都是指向<code>tail</code>。因为不成立所以让<code>p=q</code>,此时p和q都是指向第二个结点。再次循循环操作。<br><img src="https://img-blog.csdnimg.cn/2019032822351839.png" alt></li>
+<li>然后再次<code>p和t</code>,都指向<code>tail</code>。定义<code>q</code>结点存储<code>p</code>的next指向的结点。此时p的next指向还是空，所以<code>q=null</code>成立。执行<code>p.casNext(null, newNode)</code>.以cas方式把<code>p</code>的<code>next</code>指向新创建出来的结点。<br><img src="https://img-blog.csdnimg.cn/20190328224115536.png" alt></li>
+<li>此时<code>if (p != t)</code>是成立的 执行<code>casTail(t, newNode);</code> 期望值是<code>t</code>,更新值新创建的结点。于是更新了tail结点移动到最后添加的结点</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20190328224628328.png" alt><br>大概的入队流程就是这样重复上述操作。直到入队成功。<code>tail</code>结点并不是每次都是尾结点。所以每次入队都要通过<code>tail</code>定位尾结点。</p>
+<pre class=" language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">offer</span><span class="token punctuation">(</span>E e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">//检查结点是为null，如果插入null则抛出空指针</span>
+        <span class="token function">checkNotNull</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">//构造一个新结点</span>
+        <span class="token keyword">final</span> Node<span class="token operator">&lt;</span>E<span class="token operator">></span> newNode <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Node</span><span class="token operator">&lt;</span>E<span class="token operator">></span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">//死循换，一直到入队成功</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span>Node<span class="token operator">&lt;</span>E<span class="token operator">></span> t <span class="token operator">=</span> tail<span class="token punctuation">,</span> p <span class="token operator">=</span> t<span class="token punctuation">;</span><span class="token punctuation">;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">//p表示队列尾结点，默认情况尾巴=结点就是taill结点</span>
+            <span class="token comment" spellcheck="true">//获取p结点的下一个节点</span>
+            Node<span class="token operator">&lt;</span>E<span class="token operator">></span> q <span class="token operator">=</span> p<span class="token punctuation">.</span>next<span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">//q为空,说明p就是taill结点</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>q <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token comment" spellcheck="true">//case方式设置p(p=t)节点的next指向当前节点</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>p<span class="token punctuation">.</span><span class="token function">casNext</span><span class="token punctuation">(</span>null<span class="token punctuation">,</span> newNode<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token keyword">if</span> <span class="token punctuation">(</span>p <span class="token operator">!=</span> t<span class="token punctuation">)</span> 
+                        <span class="token comment" spellcheck="true">//p不等于t更新尾结点,</span>
+                        <span class="token function">casTail</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> newNode<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//失败了也是没事的，因为表示有其他线程成功更新了tail节点</span>
+                    <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+                <span class="token comment" spellcheck="true">//其他线程抢先完成入队，需要重新尝试</span>
+            <span class="token punctuation">}</span>
+            <span class="token comment" spellcheck="true">//q不为空，p和相等</span>
+            <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>p <span class="token operator">==</span> q<span class="token punctuation">)</span>
+                p <span class="token operator">=</span> <span class="token punctuation">(</span>t <span class="token operator">!=</span> <span class="token punctuation">(</span>t <span class="token operator">=</span> tail<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">?</span> t <span class="token operator">:</span> head<span class="token punctuation">;</span>
+            <span class="token keyword">else</span>
+                <span class="token comment" spellcheck="true">// // 在两跳之后检查尾部更新.</span>
+                p <span class="token operator">=</span> <span class="token punctuation">(</span>p <span class="token operator">!=</span> t <span class="token operator">&amp;&amp;</span> t <span class="token operator">!=</span> <span class="token punctuation">(</span>t <span class="token operator">=</span> tail<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">?</span> t <span class="token operator">:</span> q<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+</code></pre>
+<h3 id="出队操作"><a href="#出队操作" class="headerlink" title="出队操作"></a>出队操作</h3><pre class=" language-java"><code class="language-java">    <span class="token keyword">public</span> E <span class="token function">poll</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">//一个标号</span>
+        restartFromHead<span class="token operator">:</span>
+        <span class="token comment" spellcheck="true">//死循环方</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token punctuation">;</span><span class="token punctuation">;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">// 定义p，h两个指针 都指向head</span>
+            <span class="token keyword">for</span> <span class="token punctuation">(</span>Node<span class="token operator">&lt;</span>E<span class="token operator">></span> h <span class="token operator">=</span> head<span class="token punctuation">,</span> p <span class="token operator">=</span> h<span class="token punctuation">,</span> q<span class="token punctuation">;</span><span class="token punctuation">;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token comment" spellcheck="true">//获取当前p的值</span>
+                E item <span class="token operator">=</span> p<span class="token punctuation">.</span>item<span class="token punctuation">;</span>
+                <span class="token comment" spellcheck="true">//值不为空，且以cas方式设置p的item赋值为空。两个条件成立向下执行</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>item <span class="token operator">!=</span> null <span class="token operator">&amp;&amp;</span> p<span class="token punctuation">.</span><span class="token function">casItem</span><span class="token punctuation">(</span>item<span class="token punctuation">,</span> null<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token comment" spellcheck="true">// p和h不相等则更新头结点，否则直接返回值</span>
+                    <span class="token keyword">if</span> <span class="token punctuation">(</span>p <span class="token operator">!=</span> h<span class="token punctuation">)</span> 
+                        <span class="token comment" spellcheck="true">//更新头结点，预期值是h,当p的next指向不为空，更新值是q,为空则是p</span>
+                        <span class="token function">updateHead</span><span class="token punctuation">(</span>h<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>q <span class="token operator">=</span> p<span class="token punctuation">.</span>next<span class="token punctuation">)</span> <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token operator">?</span> q <span class="token operator">:</span> p<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                        <span class="token comment" spellcheck="true">//返回当前p的值</span>
+                    <span class="token keyword">return</span> item<span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+                <span class="token comment" spellcheck="true">//如果item为空说明已经被出队了，然后判断q是否null,是空则说明当前队列为空了。但是q = p.next赋值语句已经执行了</span>
+                <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>q <span class="token operator">=</span> p<span class="token punctuation">.</span>next<span class="token punctuation">)</span> <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token comment" spellcheck="true">//更新头结点，预期值h=head,更新p.此时p的item是空，说明已经被出队了</span>
+                    <span class="token function">updateHead</span><span class="token punctuation">(</span>h<span class="token punctuation">,</span> p<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token keyword">return</span> null<span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+                <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>p <span class="token operator">==</span> q<span class="token punctuation">)</span>
+                    <span class="token keyword">continue</span> restartFromHead<span class="token punctuation">;</span>
+                <span class="token keyword">else</span>
+                    p <span class="token operator">=</span> q<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+</code></pre>
+<ul>
+<li>出队操作是以死循环的方式直到出队成功。 第一次出队首先执行<code>for (Node&lt;E&gt; h = head, p = h, q;;)</code> 定义两个指针<code>p</code>和<code>h</code>都指向<code>head</code><br><img src="https://img-blog.csdnimg.cn/2019032900283295.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAzOTEzNDI=,size_16,color_FFFFFF,t_70" alt></li>
+<li>然后定义一个item存储p(这里就是head)的值，然后判断item是否为空，此时第一次出队时为空的，则执行 <code>else if ((q = p.next) == null)</code> ,此条件不成立，因为head的next有结点。执行 <code>else if (p == q)</code>，此时不相等，因为上个操作已经<code>把q赋值为p的next结点了</code>。所以执行最后的else语句  <code>p = q;</code>在次循环执行。<br><img src="https://img-blog.csdnimg.cn/20190329004142245.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAzOTEzNDI=,size_16,color_FFFFFF,t_70" alt></li>
+<li>此时<code>p.item</code>不为空条件成立且以<code>cas</code>方式更新<code>p</code>的i<code>tem</code>为空 <code>p.casItem(item, null)</code>。如果都两个条件都成立，判断 <code>if (p != h)</code>此时不成立的，更新<code>updateHead(h, ((q = p.next) != null) ? q : p);</code> 预期值是<code>h,</code>更新值是<code>q</code> 因为不为空。并返回item,第一次出队成功。</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/2019032900524254.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAzOTEzNDI=,size_16,color_FFFFFF,t_70" alt="第一次出队成功结构"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li><code>CoucurrentLinkedQueue</code>的结构由头节点和尾节点组成的，都是使用<code>volatile</code>修饰的。每个节点由节点元素<code>item</code>和指向下一个节点的<code>next</code>引用组成.</li>
+<li><code>入队</code>:先检查插入的值是否为空，如果是空则抛出异常。然后以死循坏的方式执行一直到入队成功，整个过程大概就是把<code>tail</code>结点的<code>next</code>指向新结点，然后更新<code>tail</code>为新结点即可。但是<code>tail</code>结点并不是每次都是尾结点。所以每次入队都要通过<code>tail</code>定位尾结点。</li>
+<li><code>出队</code>：出队操作就是从队列里返回一个最早插入的节点元素，并清空该节点对元素的引用。并不是每次出队都更新<code>head</code>节点，当<code>head</code>节点有元素时，直接弹出<code>head</code>节点的元素，并以<code>cas</code>方式设置节点的<code>item</code>为<code>null</code>,不会更新<code>head</code>节点。只有当<code>head</code>节点没有元素值时，出队操作才会更新<code>head</code>节点，这种做法是为了减少<code>cas</code>方式更新<code>head</code>节点的消耗，提供出队的效率</li>
+</ul>
+<p><img src="http://wx1.sinaimg.cn/large/006b7Nxngy1g1eu6ewhl9j30760763yz.jpg" alt="觉得本文不错的话，分享一下给小伙伴吧~"></p>
+
+            </div>
+            <hr>
+
+            
+            <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.88rem;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fa fa-close"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.png" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+
+            <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    <div class="social-share" data-disabled="qzone" data-wechat-qrcode-helper="<p>微信里点“发现”->“扫一扫”二维码便可查看分享。</p>"></div>
+    
+</div>
+
+<script src="/libs/share/js/social-share.min.js"></script>
+
+            <div class="reprint">
+                <p>
+                    <span class="reprint-tip">
+                        <i class="fa fa-exclamation-circle"></i>&nbsp;&nbsp;转载请注明:
+                    </span>
+                    <a href="http://songsimen.github.io" class="b-link-green">mengc</a>
+                    <i class="fa fa-angle-right fa-lg fa-fw text-color"></i>
+                    <a href="/2019/03/29/java/shen-ru-li-jie-concurrentlinkedqueue-yuan-ma/" class="b-link-green">并发编程-深入理解ConcurrentLinkedQueue源码</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2019/03/30/java/shen-ru-li-jie-arrayblockingqueue/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="并发编程-深入理解阻塞队列ArrayBlockingQueue源码">
+                        
+                        <span class="card-title">并发编程-深入理解阻塞队列ArrayBlockingQueue源码</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary">概述
+ArrayBlockingQueue是一个由数组构成的有界阻塞队列，此队列按 FIFO（先进先出）原则对元素进行排序,支持公平和非公平模式，默认情况下不保证线程公平的访问队列。新元素插入到队列的尾部，队列获取操作则是从队列头部开始获得</div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2019-03-30
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/并发编程/" class="post-category" target="_blank">
+                                    并发编程
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/ArrayBlockingQueue/" target="_blank">
+                        <span class="chip bg-color">ArrayBlockingQueue</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2019/03/28/java/shen-ru-li-jie-threadlocal-yuan-ma/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="并发编程-深入理解ThreadLocal源码">
+                        
+                        <span class="card-title">并发编程-深入理解ThreadLocal源码</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary">概述
+ThreadLocal 是一个本地线程副本变量工具类。主要用于将私有线程和该线程存放的副本对象做一个映射，各个线程之间的变量互不干扰。在高并发场景下，可以实现无状态的调用，适用于各个线程不共享变量值的操作。
+内部使用静态内部类Thre</div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-03-28
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/并发编程/" class="post-category" target="_blank">
+                                    并发编程
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/ThreadLocal/" target="_blank">
+                        <span class="chip bg-color">ThreadLocal</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+</div>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="fa fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fa fa-list"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            // headingsOffset: -205,
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).slideUp(500);
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).slideDown(500);
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+    
+
+</main>
+
+
+<footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            本站版权归属&copy;<a href="https://blinkfox.github.io/" target="_blank">mengc</a>所有
+
+            
+
+            
+			
+                <br>
+                
+                <span id="busuanzi_container_site_pv">
+                    <i class="fa fa-heart-o"></i>
+                    本站总访问量 <span id="busuanzi_value_site_pv" class="white-color"></span>
+                </span>
+                
+                
+                <span id="busuanzi_container_site_uv">
+                    <i class="fa fa-users"></i>
+                    次,&nbsp;访客数 <span id="busuanzi_value_site_uv" class="white-color"></span> 人.
+                </span>
+                
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+    <a href="mailto:515324804@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fa fa-envelope-open"></i>
+    </a>
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=515324804" class="tooltipped" data-tooltip="QQ联系我: 515324804" data-position="top" data-delay="50">
+        <i class="fa fa-qq"></i>
+    </a>
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fa fa-rss"></i>
+    </a>
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+<!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fa fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字" class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+<!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fa fa-angle-up"></i>
+    </a>
+</div>
+
+
+<script src="/libs/materialize/materialize.min.js"></script>
+<script src="/libs/masonry/masonry.pkgd.min.js"></script>
+<script src="/libs/aos/aos.js"></script>
+<script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+<script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+<script src="/js/matery.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+
+    <script src="/libs/others/clicklove.js"></script>
+
+
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+
+
+</body>
+</html>

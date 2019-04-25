@@ -1,0 +1,1234 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="ElasticSearch安装及Api使用, UI,PS,AI,C4D">
+    <meta name="description" content="ElasticSearch 简介ElasticSearch是一个高度可扩展的开源搜索引擎并使用REST API，所以您值得拥有。 在本教程中，将介绍开始使用ElasticSearch的一些主要概念。
+下载并运行ElasticSearchEl">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>ElasticSearch安装及Api使用 | mengc</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    <style type="text/css">
+        
+    </style>
+
+    <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+
+<header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">mengc</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fa fa-navicon"></i></a>
+<ul class="right">
+    
+    <li class="hide-on-med-and-down">
+        <a href="/" class="waves-effect waves-light">
+            
+            <i class="fa fa-home"></i>
+            
+            <span>首页</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/tags" class="waves-effect waves-light">
+            
+            <i class="fa fa-tags"></i>
+            
+            <span>标签</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories" class="waves-effect waves-light">
+            
+            <i class="fa fa-bookmark"></i>
+            
+            <span>分类</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/archives" class="waves-effect waves-light">
+            
+            <i class="fa fa-archive"></i>
+            
+            <span>归档</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/about" class="waves-effect waves-light">
+            
+            <i class="fa fa-user-circle-o"></i>
+            
+            <span>关于</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/friends" class="waves-effect waves-light">
+            
+            <i class="fa fa-address-book"></i>
+            
+            <span>友情链接</span>
+        </a>
+    </li>
+    
+    <li>
+        <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+            <i id="searchIcon" class="fa fa-search" title="搜索"></i>
+        </a>
+    </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">mengc</div>
+        <div class="logo-desc">
+            
+            为设计而生,做用户最好的伙伴.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li>
+            <a href="/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-home"></i>
+                
+                首页
+            </a>
+        </li>
+        
+        <li>
+            <a href="/tags" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-tags"></i>
+                
+                标签
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-bookmark"></i>
+                
+                分类
+            </a>
+        </li>
+        
+        <li>
+            <a href="/archives" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-archive"></i>
+                
+                归档
+            </a>
+        </li>
+        
+        <li>
+            <a href="/about" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-user-circle-o"></i>
+                
+                关于
+            </a>
+        </li>
+        
+        <li>
+            <a href="/friends" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-address-book"></i>
+                
+                友情链接
+            </a>
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light" target="_blank">
+                <i class="fa fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/blinkfox/hexo-theme-matery" class="github-corner tooltipped hide-on-med-and-down" target="_blank" data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewbox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/2.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        ElasticSearch安装及Api使用
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 20px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/ElasticSearch/" target="_blank">
+                                <span class="chip bg-color">ElasticSearch</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fa fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/springboot/" class="post-category" target="_blank">
+                                springboot
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                <div class="post-date info-break-policy">
+                    <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2018-08-27
+                </div>
+
+                
+				
+				
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="fa fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h3 id="ElasticSearch-简介"><a href="#ElasticSearch-简介" class="headerlink" title="ElasticSearch 简介"></a>ElasticSearch 简介</h3><p>ElasticSearch是一个高度可扩展的开源搜索引擎并使用REST API，所以您值得拥有。 在本教程中，将介绍开始使用ElasticSearch的一些主要概念。</p>
+<h3 id="下载并运行ElasticSearch"><a href="#下载并运行ElasticSearch" class="headerlink" title="下载并运行ElasticSearch"></a>下载并运行ElasticSearch</h3><p>ElasticSearch可以从elasticsearch.org下载对应的文件格式，如ZIP和TAR.GZ。下载并提取一个运行它的软件包之后不会容易得多，需要提前安装Java运行时环境。<br>下载链接 <a href="https://www.elastic.co/products/elasticsearch" target="_blank" rel="noopener">https://www.elastic.co/products/elasticsearch</a></p>
+<h3 id="在Windows上运行ElasticSearch"><a href="#在Windows上运行ElasticSearch" class="headerlink" title="在Windows上运行ElasticSearch"></a>在Windows上运行ElasticSearch</h3><ul>
+<li>从命令窗口运行位于bin文件夹中的elasticsearch.bat。这将会启动ElasticSearch在控制台的前台运行，这意味着我们可在控制台中看到运行信息或一些错误信息，并可以使用CTRL + C停止或关闭它。</li>
+<li>在启动过程中，ElasticSearch的实例运行会占用大量的内存，所以在这一过程中，电脑会变得比较慢，需要耐心等待，启动加载完成后电脑就可以正常使用了</li>
+<li>当ElasticSearch的实例并运行，您可以使用<a href="http://localhost:9200检查是否运行成功" target="_blank" rel="noopener">http://localhost:9200检查是否运行成功</a></li>
+</ul>
+<h3 id="Linux安装ElasticSearch"><a href="#Linux安装ElasticSearch" class="headerlink" title="Linux安装ElasticSearch"></a><a href="https://blog.csdn.net/weixin_41615494/article/details/79591335" target="_blank" rel="noopener">Linux安装ElasticSearch</a></h3><p>访问elasticSearch官网地址 <a href="https://www.elastic.co/" target="_blank" rel="noopener">https://www.elastic.co/</a><br>下载指定版本的安装包：elasticsearch-6.1.1.tar.gz,上传至指定目录/usr/local/elasticsearch</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true">#解压</span>
+<span class="token function">tar</span> -zxvf elasticsearch-6.1.1.tar.gz
+<span class="token comment" spellcheck="true">#创建数据存储目录</span>
+<span class="token function">mkdir</span> -p /usr/local/elasticsearch/data
+<span class="token comment" spellcheck="true">#创建日志存储目录</span>
+<span class="token function">mkdir</span> -p /usr/local/elasticsearch/logs
+
+<span class="token comment" spellcheck="true">#进入到es安装目录下的config文件夹中，修改elasticsearch.yml 文件</span>
+
+<span class="token comment" spellcheck="true">#配置es的集群名称，默认是elasticsearch，es会自动发现在同一网段下的es，如果在同一网段下有多个集群，就可以用这个属性来区分不同的集群。</span>
+cluster.name: qxw-application
+<span class="token comment" spellcheck="true">#节点名称</span>
+node.name: node-1 
+<span class="token comment" spellcheck="true">#设置索引数据的存储路径</span>
+path.data: /usr/local/elasticsearch/data 
+<span class="token comment" spellcheck="true">#设置日志的存储路径</span>
+path.logs: /usr/local/elasticsearch/logs 
+<span class="token comment" spellcheck="true">#设置当前的ip地址,通过指定相同网段的其他节点会加入该集群中</span>
+network.host: 192.168.1.191
+<span class="token comment" spellcheck="true">#设置对外服务的http端口</span>
+http.port: 9200 
+<span class="token comment" spellcheck="true">#设置集群中master节点的初始列表，可以通过这些节点来自动发现新加入集群的节点</span>
+discovery.zen.ping.unicast.hosts: <span class="token punctuation">[</span><span class="token string">"node-1"</span><span class="token punctuation">]</span>
+</code></pre>
+<p><strong>修改host 文件，执行命令 vi /etc/hosts</strong><br><img src="http://wx1.sinaimg.cn/large/006b7Nxngy1g1g2v4apszj30fl038a9x.jpg" alt></p>
+<p> <strong>因为安全问题elasticsearch 不让用root用户直接运行，所以要创建新用户。</strong> </p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">useradd</span> es
+<span class="token function">passwd</span> es
+再输入两次密码<span class="token punctuation">(</span>自定义<span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">#给新创建用户文件夹执行权限</span>
+<span class="token function">chown</span> -R es:es /usr/local/elasticsearch
+
+切换es用户：su es
+
+启动集群命令：
+<span class="token function">cd</span>  /usr/local/elasticsearch
+bin/elasticsearch
+</code></pre>
+<p> <strong>在es用户下启动时报错</strong><br><img src="http://wx1.sinaimg.cn/large/006b7Nxngy1g1g2vqkp6nj30xk05v3zh.jpg" alt></p>
+<pre><code>原因：Centos6不支持SecComp，而ES默认bootstrap.system_call_filter为true进行检测，所以导致检测失败，失败后直接导致ES不能启动
+
+详见 ：https://github.com/elastic/elasticsearch/issues/22899
+解决方案：
+
+在elasticsearch.yml中新增配置bootstrap.system_call_filter，设为false。
+bootstrap.system_call_filter: false
+</code></pre><p><img src="http://wx1.sinaimg.cn/large/006b7Nxngy1g1g2wl1lpkj30u303pgm5.jpg" alt></p>
+<p> <strong>第一个问题的原因：</strong> </p>
+<pre class=" language-bash"><code class="language-bash">原因：无法创建本地文件问题,用户最大可创建文件数太小
+
+解决方案：切换到root用户，编辑limits.conf配置文件， 添加类似如下内容：
+
+<span class="token function">vi</span> /etc/security/limits.conf
+
+添加如下内容: 注意*不要去掉了
+
+* soft nofile 65536
+
+* hard nofile 131072
+
+备注：* 代表Linux所有用户名称（比如 hadoop）
+
+需要保存、退出、重新登录才可生效。
+</code></pre>
+<p><strong>第二个错误的原因：</strong> </p>
+<pre class=" language-bash"><code class="language-bash">原因：无法创建本地线程问题,用户最大可创建线程数太小
+
+解决方案：切换到root用户，进入limits.d目录下，修改90-nproc.conf 配置文件。
+
+<span class="token function">vi</span> /etc/security/limits.d/90-nproc.conf
+
+找到如下内容：
+
+* soft nproc 1024
+
+<span class="token comment" spellcheck="true">#修改为</span>
+
+* soft nproc 4096
+</code></pre>
+<p><strong>第三个错误的原因：</strong> </p>
+<pre><code>原因：最大虚拟内存太小
+
+每次启动机器都手动执行下。
+
+root用户执行命令：
+
+执行命令：sysctl -w vm.max_map_count=262144
+
+查看修改结果命令：sysctl -a|grep vm.max_map_count  看是否已经修改
+
+永久性修改策略：
+
+echo &quot;vm.max_map_count=262144&quot; &gt;&gt; /etc/sysctl.conf
+</code></pre><p> <strong>切换到es用户执行:bin/elasticsearch</strong><br>访问：<a href="http://192.168.1.191:9200/" target="_blank" rel="noopener">http://192.168.1.191:9200/</a></p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true">#后台启动</span>
+<span class="token punctuation">[</span>es@localhost elasticsearch-6.4.0<span class="token punctuation">]</span>$ ./bin/elasticsearch -d
+<span class="token punctuation">[</span>es@localhost elasticsearch-6.4.0<span class="token punctuation">]</span>$ jps
+27587 Jps
+27573 Elasticsearch
+</code></pre>
+<h3 id="elasticsearch-服务安全配置"><a href="#elasticsearch-服务安全配置" class="headerlink" title="elasticsearch 服务安全配置"></a>elasticsearch 服务安全配置</h3><p> <strong>一、目前主要通过插件的形式来控制：</strong> </p>
+<ol>
+<li>常用的插件主要包括：elasticsearch-http-basic，search-guard，shield</li>
+<li>由于shield是收费的暂时还未研究（研究后统一补充）</li>
+<li>search-guard主要用于elasticsearch2.x以后的版本（研究后统一补充）</li>
+<li>elasticsearch-http-basic主要用于elasticsearch1.x的版本</li>
+<li><p>基于目前我们es集群大部分都是1.5.2版本的，所以主要使用http-basic来控制来自http请求的访问。</p>
+<p><strong>二、elasticsearch-http-basic安装：</strong> </p>
+</li>
+<li>下载elasticsearch-http-basic-1.5.1.jar（下载地址：<a href="https://github.com/Asquera/elasticsearch-http-basic/releases）" target="_blank" rel="noopener">https://github.com/Asquera/elasticsearch-http-basic/releases）</a></li>
+<li>在ES的plugins文件夹下新建http-basic文件夹</li>
+<li>把下载的 elasticsearch-http-basic-1.5.1.jar拷贝到新建的http-basic文件夹下</li>
+<li>修改ES的配置文件elasticsearch.yml,在文件末尾添加以下配置：</li>
+</ol>
+<pre class=" language-bash"><code class="language-bash">配置名                                     默认值                            说明
+
+http.basic.enabled                         <span class="token boolean">true</span>                            开关，开启会接管全部HTTP连接
+
+http.basic.user                          <span class="token string">"admin"</span>                          账号
+
+http.basic.password                      <span class="token string">"admin_pw"</span>                       密码
+
+http.basic.ipwhitelist            <span class="token punctuation">[</span><span class="token string">"localhost"</span>, <span class="token string">"127.0.0.1"</span><span class="token punctuation">]</span>    白名单内的ip访问不需要通过账号和密码，支持ip和主机名，不支持ip区间或正则
+
+http.basic.trusted_proxy_chains    <span class="token punctuation">[</span><span class="token punctuation">]</span>                                    信任代理列表
+
+http.basic.log    <span class="token boolean">false</span>                                              把无授权的访问事件添加到ES的日志
+
+http.basic.xforward    <span class="token string">""</span>                                          记载代理路径的header字段名
+
+5.重启ES集群
+目前我们主要通过http.basic.ipwhitelist 白名单 + 用户名、密码来控制外部机器对ES集群的http请求，
+
+1.在白名单内的ip列表用户无需验证可直接通过ES节点的ip地址访问ES，白名单外的用户无权访问ES集群
+
+2.由于白名单无法控制通过域名的访问，如果要通过域名访问ES必须要通过用户名和密码来访问
+</code></pre>
+<h3 id="java中使用elastaicsearch-RestHighLevelClient"><a href="#java中使用elastaicsearch-RestHighLevelClient" class="headerlink" title="java中使用elastaicsearch(RestHighLevelClient)"></a>java中使用elastaicsearch(RestHighLevelClient)</h3><p>官方文档可以得知，现在存在至少三种Java客户端。</p>
+<ol>
+<li>Transport Client</li>
+<li>Java High Level REST Client</li>
+<li>Java Low Level Rest Client</li>
+<li>强烈建议ES5及其以后的版本使用Java High Level REST Client</li>
+</ol>
+<p><strong>java High Level REST Client 介绍</strong> </p>
+<ul>
+<li>Java High Level REST Client 是基于Java Low Level REST Client的，每个方法都可以是同步或者异步的。同步方法返回响应对象，而异步方法名以“async”结尾，并需要传入一个监听参数，来确保提醒是否有错误发生。</li>
+<li>Java High Level REST Client需要Java1.8版本和ES。并且ES的版本要和客户端版本一致。和TransportClient接收的参数和返回值是一样的。</li>
+</ul>
+<p>引入maven依赖</p>
+<pre class=" language-java"><code class="language-java"><span class="token operator">&lt;</span>dependency<span class="token operator">></span>
+            <span class="token operator">&lt;</span>groupId<span class="token operator">></span>org<span class="token punctuation">.</span>elasticsearch<span class="token punctuation">.</span>client<span class="token operator">&lt;</span><span class="token operator">/</span>groupId<span class="token operator">></span>
+            <span class="token operator">&lt;</span>artifactId<span class="token operator">></span>elasticsearch<span class="token operator">-</span>rest<span class="token operator">-</span>high<span class="token operator">-</span>level<span class="token operator">-</span>client<span class="token operator">&lt;</span><span class="token operator">/</span>artifactId<span class="token operator">></span>
+            <span class="token operator">&lt;</span>version<span class="token operator">></span><span class="token number">6.2</span><span class="token punctuation">.</span><span class="token number">3</span><span class="token operator">&lt;</span><span class="token operator">/</span>version<span class="token operator">></span>
+        <span class="token operator">&lt;</span><span class="token operator">/</span>dependency<span class="token operator">></span>
+</code></pre>
+<p>Java基础操作</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">RestClientTest</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token comment" spellcheck="true">//        index();</span>
+<span class="token comment" spellcheck="true">//        bacthIndex();</span>
+         <span class="token function">queryTest</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">/**
+     * 插入数据
+     */</span>
+    <span class="token keyword">public</span>  <span class="token keyword">static</span>  <span class="token keyword">void</span>  <span class="token function">index</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">//RestHighLevelClient实例需要低级客户端构建器来构建</span>
+            RestHighLevelClient client <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">RestHighLevelClient</span><span class="token punctuation">(</span>RestClient<span class="token punctuation">.</span><span class="token function">builder</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">HttpHost</span><span class="token punctuation">(</span><span class="token string">"localhost"</span><span class="token punctuation">,</span> <span class="token number">9200</span><span class="token punctuation">,</span> <span class="token string">"http"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            IndexRequest indexRequest <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">IndexRequest</span><span class="token punctuation">(</span><span class="token string">"demo"</span><span class="token punctuation">,</span> <span class="token string">"demo"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            JSONObject obj<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">JSONObject</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            obj<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"title"</span><span class="token punctuation">,</span><span class="token string">"标题图表题大法师飞洒发顺丰三"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            obj<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"time"</span><span class="token punctuation">,</span><span class="token string">"2018-08-21 17:43:50"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            indexRequest<span class="token punctuation">.</span><span class="token function">source</span><span class="token punctuation">(</span>obj<span class="token punctuation">.</span><span class="token function">toJSONString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>XContentType<span class="token punctuation">.</span>JSON<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">//添加索引</span>
+            client<span class="token punctuation">.</span><span class="token function">index</span><span class="token punctuation">(</span>indexRequest<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            client<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token comment" spellcheck="true">//http://localhost:9200/demo/demo/_search  浏览器运行查询数据</span>
+        <span class="token punctuation">}</span><span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span><span class="token punctuation">{</span>
+                e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">/**
+     * 批量插入数据
+     */</span>
+   <span class="token keyword">public</span> <span class="token keyword">static</span>  <span class="token keyword">void</span>  <span class="token function">bacthIndex</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+       RestHighLevelClient client <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">RestHighLevelClient</span><span class="token punctuation">(</span>RestClient<span class="token punctuation">.</span><span class="token function">builder</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">HttpHost</span><span class="token punctuation">(</span><span class="token string">"localhost"</span><span class="token punctuation">,</span> <span class="token number">9200</span><span class="token punctuation">,</span> <span class="token string">"http"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       List<span class="token operator">&lt;</span>IndexRequest<span class="token operator">></span> requests <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       requests<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token function">generateNewsRequest</span><span class="token punctuation">(</span><span class="token string">"中印边防军于拉达克举行会晤 强调维护边境和平"</span><span class="token punctuation">,</span> <span class="token string">"2018-01-27T08:34:00Z"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       BulkRequest bulkRequest <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BulkRequest</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token keyword">for</span> <span class="token punctuation">(</span>IndexRequest indexRequest <span class="token operator">:</span> requests<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+           bulkRequest<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>indexRequest<span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span>
+       <span class="token keyword">try</span> <span class="token punctuation">{</span>
+           client<span class="token punctuation">.</span><span class="token function">bulk</span><span class="token punctuation">(</span>bulkRequest<span class="token punctuation">)</span><span class="token punctuation">;</span>
+           client<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+           e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span>
+   <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> IndexRequest <span class="token function">generateNewsRequest</span><span class="token punctuation">(</span>String title<span class="token punctuation">,</span>String publishTime<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        IndexRequest indexRequest <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">IndexRequest</span><span class="token punctuation">(</span><span class="token string">"demo"</span><span class="token punctuation">,</span> <span class="token string">"demo"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        JSONObject obj<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">JSONObject</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        obj<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"title"</span><span class="token punctuation">,</span>title<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        obj<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"time"</span><span class="token punctuation">,</span>publishTime<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        indexRequest<span class="token punctuation">.</span><span class="token function">source</span><span class="token punctuation">(</span>obj<span class="token punctuation">.</span><span class="token function">toJSONString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>XContentType<span class="token punctuation">.</span>JSON<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> indexRequest<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">/**
+     * 查询操作
+     * https://blog.csdn.net/paditang/article/details/78802799
+     * https://blog.csdn.net/A_Story_Donkey/article/details/79667670
+     * https://www.cnblogs.com/wenbronk/p/6432990.html
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span>  <span class="token keyword">void</span>  <span class="token function">queryTest</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        RestHighLevelClient client <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">RestHighLevelClient</span><span class="token punctuation">(</span>RestClient<span class="token punctuation">.</span><span class="token function">builder</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">HttpHost</span><span class="token punctuation">(</span><span class="token string">"localhost"</span><span class="token punctuation">,</span> <span class="token number">9200</span><span class="token punctuation">,</span> <span class="token string">"http"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 这个sourcebuilder就类似于查询语句中最外层的部分。包括查询分页的起始，</span>
+        <span class="token comment" spellcheck="true">// 查询语句的核心，查询结果的排序，查询结果截取部分返回等一系列配置</span>
+        SearchSourceBuilder sourceBuilder <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SearchSourceBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">// 结果开始处</span>
+            sourceBuilder<span class="token punctuation">.</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">// 查询结果终止处</span>
+            sourceBuilder<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">// 查询的等待时间</span>
+            sourceBuilder<span class="token punctuation">.</span><span class="token function">timeout</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">TimeValue</span><span class="token punctuation">(</span><span class="token number">60</span><span class="token punctuation">,</span> TimeUnit<span class="token punctuation">.</span>SECONDS<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token comment" spellcheck="true">/**
+             * 使用QueryBuilder
+             * termQuery("key", obj) 完全匹配
+             * termsQuery("key", obj1, obj2..)   一次匹配多个值
+             * matchQuery("key", Obj) 单个匹配, field不支持通配符, 前缀具高级特性
+             * multiMatchQuery("text", "field1", "field2"..);  匹配多个字段, field有通配符忒行
+             * matchAllQuery();         匹配所有文件
+             */</span>
+            MatchQueryBuilder matchQueryBuilder <span class="token operator">=</span> QueryBuilders<span class="token punctuation">.</span><span class="token function">matchQuery</span><span class="token punctuation">(</span><span class="token string">"title"</span><span class="token punctuation">,</span> <span class="token string">"费德勒"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token comment" spellcheck="true">//分词精确查询</span>
+<span class="token comment" spellcheck="true">//            TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("tag", "体育");</span>
+
+
+<span class="token comment" spellcheck="true">//            // 查询在时间区间范围内的结果  范围查询</span>
+<span class="token comment" spellcheck="true">//            RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery("publishTime");</span>
+<span class="token comment" spellcheck="true">//            rangeQueryBuilder.gte("2018-01-26T08:00:00Z");</span>
+<span class="token comment" spellcheck="true">//            rangeQueryBuilder.lte("2018-01-26T20:00:00Z");</span>
+
+            <span class="token comment" spellcheck="true">// 等同于bool，将两个查询合并</span>
+            BoolQueryBuilder boolBuilder <span class="token operator">=</span> QueryBuilders<span class="token punctuation">.</span><span class="token function">boolQuery</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            boolBuilder<span class="token punctuation">.</span><span class="token function">must</span><span class="token punctuation">(</span>matchQueryBuilder<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//            boolBuilder.must(termQueryBuilder);</span>
+<span class="token comment" spellcheck="true">//            boolBuilder.must(rangeQueryBuilder);</span>
+            sourceBuilder<span class="token punctuation">.</span><span class="token function">query</span><span class="token punctuation">(</span>boolBuilder<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token comment" spellcheck="true">// 排序</span>
+<span class="token comment" spellcheck="true">//            FieldSortBuilder fsb = SortBuilders.fieldSort("date");</span>
+<span class="token comment" spellcheck="true">//            fsb.order(SortOrder.DESC);</span>
+<span class="token comment" spellcheck="true">//            sourceBuilder.sort(fsb);</span>
+
+
+            SearchRequest searchRequest <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SearchRequest</span><span class="token punctuation">(</span><span class="token string">"demo"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            searchRequest<span class="token punctuation">.</span><span class="token function">types</span><span class="token punctuation">(</span><span class="token string">"demo"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            searchRequest<span class="token punctuation">.</span><span class="token function">source</span><span class="token punctuation">(</span>sourceBuilder<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            SearchResponse response <span class="token operator">=</span> client<span class="token punctuation">.</span><span class="token function">search</span><span class="token punctuation">(</span>searchRequest<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>response<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            client<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span><span class="token punctuation">{</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+</code></pre>
+<h3 id="Kibana-linux下安装"><a href="#Kibana-linux下安装" class="headerlink" title="Kibana linux下安装"></a>Kibana linux下安装</h3><ul>
+<li>下载地址：<a href="https://www.elastic.co/downloads/kibana" target="_blank" rel="noopener">https://www.elastic.co/downloads/kibana</a></li>
+<li><p>解压：tar zxvf kibana-6.4.0-linux-x64.tar.gz</p>
+<p><strong>配置</strong><br><a href="https://www.elastic.co/guide/cn/kibana/current/settings.html" target="_blank" rel="noopener">https://www.elastic.co/guide/cn/kibana/current/settings.html</a></p>
+<pre class=" language-bash"><code class="language-bash">server.port: 5601
+server.host: <span class="token string">"192.168.1.191"</span>
+elasticsearch.url: <span class="token string">"http://192.168.1.191:9200"</span>
+</code></pre>
+<p><strong>启动</strong> </p>
+</li>
+</ul>
+<pre class=" language-bash"><code class="language-bash">./kibana  //不能关闭终端
+<span class="token function">nohup</span>  ./kibana <span class="token operator">></span> /nohub.out <span class="token operator">&amp;</span>  //可关闭终端，在nohup.out中查看log
+在浏览器中访问：http://192.168.1.191:5601/
+</code></pre>
+<h3 id="FileBeats-与-LogStash-的安装"><a href="#FileBeats-与-LogStash-的安装" class="headerlink" title="FileBeats 与 LogStash 的安装"></a>FileBeats 与 LogStash 的安装</h3><ul>
+<li>LogStash 可以用来对日志进行收集并进行过滤整理后输出到 ES 中，FileBeats 是一个更加轻量级的日志收集工具。 </li>
+<li>现在最常用的方式是通过 FileBeats 收集目标日志，然后统一输出到 LogStash 做进一步的过滤，在由 LogStash 输出到 ES 中进行存储。</li>
+</ul>
+<p>官方提供了压缩包下载， <a href="https://www.elastic.co/downloads/logstash" target="_blank" rel="noopener">https://www.elastic.co/downloads/logstash</a> 。 下载完成后解压即可。</p>
+<pre><code>tar zxvf logstash-6.2.2.tar.gz
+###  进入目录
+cd logstash-6.2.2
+</code></pre><p>LogStash 的运行需要指定一个配置文件，来指定数据的流向，我们在当前目录下创建一个 first.conf 文件，其内容如下:</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true">###  配置输入为 beats</span>
+input <span class="token punctuation">{</span>
+    beats <span class="token punctuation">{</span>
+            port <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"5044"</span>
+
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">###  数据过滤</span>
+filter <span class="token punctuation">{</span>
+    grok <span class="token punctuation">{</span>
+            match <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span> <span class="token string">"message"</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"%{COMBINEDAPACHELOG}"</span> <span class="token punctuation">}</span>
+
+    <span class="token punctuation">}</span>
+    geoip <span class="token punctuation">{</span>
+            <span class="token function">source</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"clientip"</span>
+
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true"># 输出到本机的 ES</span>
+output <span class="token punctuation">{</span>
+    elasticsearch <span class="token punctuation">{</span>
+            hosts <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">[</span> <span class="token string">"192.168.1.191:9200"</span>  <span class="token punctuation">]</span>
+
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+</code></pre>
+<p>上面配置了 LogStash 输出日志到 ES 中 配置完成后就可以通过如下方式启动 LogStash 了</p>
+<pre><code>bin/logstash -f first.conf --config.reload.automatic
+</code></pre><h3 id="安装运行-FileBeats"><a href="#安装运行-FileBeats" class="headerlink" title="安装运行 FileBeats"></a>安装运行 FileBeats</h3><p>FileBeats 也提供了下载包，地址为 <a href="https://www.elastic.co/downloads/beats/filebeat" target="_blank" rel="noopener">https://www.elastic.co/downloads/beats/filebeat</a> 。找到系统对应的包下载后解压即可。</p>
+<pre><code>tar zxvf filebeat-6.2.2-darwin-x86_64.tar.gz
+cd filebeat-6.2.2-darwin-x86_64
+</code></pre><p>进入目录编辑 filebeat.yml 找到对应的配置项，配置如下</p>
+<pre><code>- type: log
+   # Change to true to enable this prospector configuration.
+    enabled: True
+
+    # Paths that should be crawled and fetched. Glob based paths.
+    # 读取 Nginx 的日志
+    paths:
+      - /usr/local/nginx/logs/*.log
+
+# 输出到本机的 LogStash
+output.logstash:
+  # The Logstash hosts
+  hosts: [&quot;localhost:5044&quot;]
+</code></pre><h3 id="配置完成后执行如下命令，启动-FileBeat-即可"><a href="#配置完成后执行如下命令，启动-FileBeat-即可" class="headerlink" title="配置完成后执行如下命令，启动 FileBeat 即可"></a>配置完成后执行如下命令，启动 FileBeat 即可</h3><pre><code># FileBeat 需要以 root 身份启动，因此先更改配置文件的权限
+sudo chown root filebeat.yml
+sudo ./filebeat -e -c filebeat.yml -d &quot;publish&quot;
+</code></pre><p><img src="http://wx1.sinaimg.cn/large/006b7Nxngy1g1eu6ewhl9j30760763yz.jpg" alt="觉得本文不错的话，分享一下给小伙伴吧~"></p>
+
+            </div>
+            <hr>
+
+            
+            <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.88rem;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fa fa-close"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.png" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+
+            <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    <div class="social-share" data-disabled="qzone" data-wechat-qrcode-helper="<p>微信里点“发现”->“扫一扫”二维码便可查看分享。</p>"></div>
+    
+</div>
+
+<script src="/libs/share/js/social-share.min.js"></script>
+
+            <div class="reprint">
+                <p>
+                    <span class="reprint-tip">
+                        <i class="fa fa-exclamation-circle"></i>&nbsp;&nbsp;转载请注明:
+                    </span>
+                    <a href="http://songsimen.github.io" class="b-link-green">mengc</a>
+                    <i class="fa fa-angle-right fa-lg fa-fw text-color"></i>
+                    <a href="/2018/08/27/java/elasticsearch-an-zhuang-ji-java-api-shi-yong/" class="b-link-green">ElasticSearch安装及Api使用</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2018/08/28/spring-xi-lie/springboot-ji-cheng-elasticsearch6-2/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="SpringBoot集成ElasticSearch6.2">
+                        
+                        <span class="card-title">SpringBoot集成ElasticSearch6.2</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary">elasticsearch (Java High Level REST Client) apiJava高级REST客户端在Java低级REST客户端之上工作。它的主要目标是公开API特定的方法，接受请求对象作为参数并返回响应对象，以便客户端</div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2018-08-28
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/springboot/" class="post-category" target="_blank">
+                                    springboot
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/ElasticSearch/" target="_blank">
+                        <span class="chip bg-color">ElasticSearch</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2018/08/13/java/hbase-kuai-su-ru-men/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="HBase快速入门">
+                        
+                        <span class="card-title">HBase快速入门</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary">Apache HBase
+Apache HBase™是Hadoop数据库，是一个分布式，可扩展的大数据存储。
+当您需要对大数据进行随机，实时读/写访问时，请使用Apache HBase™。该项目的目标是托管非常大的表 - 数十亿行X百万列 </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2018-08-13
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/HBase/" class="post-category" target="_blank">
+                                    HBase
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/HBase/" target="_blank">
+                        <span class="chip bg-color">HBase</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+</div>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="fa fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fa fa-list"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            // headingsOffset: -205,
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).slideUp(500);
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).slideDown(500);
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+    
+
+</main>
+
+
+<footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            本站版权归属&copy;<a href="https://blinkfox.github.io/" target="_blank">mengc</a>所有
+
+            
+
+            
+			
+                <br>
+                
+                <span id="busuanzi_container_site_pv">
+                    <i class="fa fa-heart-o"></i>
+                    本站总访问量 <span id="busuanzi_value_site_pv" class="white-color"></span>
+                </span>
+                
+                
+                <span id="busuanzi_container_site_uv">
+                    <i class="fa fa-users"></i>
+                    次,&nbsp;访客数 <span id="busuanzi_value_site_uv" class="white-color"></span> 人.
+                </span>
+                
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+    <a href="mailto:515324804@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fa fa-envelope-open"></i>
+    </a>
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=515324804" class="tooltipped" data-tooltip="QQ联系我: 515324804" data-position="top" data-delay="50">
+        <i class="fa fa-qq"></i>
+    </a>
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fa fa-rss"></i>
+    </a>
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+<!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fa fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字" class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+<!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fa fa-angle-up"></i>
+    </a>
+</div>
+
+
+<script src="/libs/materialize/materialize.min.js"></script>
+<script src="/libs/masonry/masonry.pkgd.min.js"></script>
+<script src="/libs/aos/aos.js"></script>
+<script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+<script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+<script src="/js/matery.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+
+    <script src="/libs/others/clicklove.js"></script>
+
+
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+
+
+</body>
+</html>

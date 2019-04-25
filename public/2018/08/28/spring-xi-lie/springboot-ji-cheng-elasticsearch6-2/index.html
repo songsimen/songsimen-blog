@@ -1,0 +1,1497 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="SpringBoot集成ElasticSearch6.2, UI,PS,AI,C4D">
+    <meta name="description" content="elasticsearch (Java High Level REST Client) apiJava高级REST客户端在Java低级REST客户端之上工作。它的主要目标是公开API特定的方法，接受请求对象作为参数并返回响应对象，以便客户端">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>SpringBoot集成ElasticSearch6.2 | mengc</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    <style type="text/css">
+        
+    </style>
+
+    <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+
+<header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">mengc</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fa fa-navicon"></i></a>
+<ul class="right">
+    
+    <li class="hide-on-med-and-down">
+        <a href="/" class="waves-effect waves-light">
+            
+            <i class="fa fa-home"></i>
+            
+            <span>首页</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/tags" class="waves-effect waves-light">
+            
+            <i class="fa fa-tags"></i>
+            
+            <span>标签</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories" class="waves-effect waves-light">
+            
+            <i class="fa fa-bookmark"></i>
+            
+            <span>分类</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/archives" class="waves-effect waves-light">
+            
+            <i class="fa fa-archive"></i>
+            
+            <span>归档</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/about" class="waves-effect waves-light">
+            
+            <i class="fa fa-user-circle-o"></i>
+            
+            <span>关于</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/friends" class="waves-effect waves-light">
+            
+            <i class="fa fa-address-book"></i>
+            
+            <span>友情链接</span>
+        </a>
+    </li>
+    
+    <li>
+        <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+            <i id="searchIcon" class="fa fa-search" title="搜索"></i>
+        </a>
+    </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">mengc</div>
+        <div class="logo-desc">
+            
+            为设计而生,做用户最好的伙伴.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li>
+            <a href="/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-home"></i>
+                
+                首页
+            </a>
+        </li>
+        
+        <li>
+            <a href="/tags" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-tags"></i>
+                
+                标签
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-bookmark"></i>
+                
+                分类
+            </a>
+        </li>
+        
+        <li>
+            <a href="/archives" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-archive"></i>
+                
+                归档
+            </a>
+        </li>
+        
+        <li>
+            <a href="/about" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-user-circle-o"></i>
+                
+                关于
+            </a>
+        </li>
+        
+        <li>
+            <a href="/friends" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-address-book"></i>
+                
+                友情链接
+            </a>
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light" target="_blank">
+                <i class="fa fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/blinkfox/hexo-theme-matery" class="github-corner tooltipped hide-on-med-and-down" target="_blank" data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewbox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/14.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        SpringBoot集成ElasticSearch6.2
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 20px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/ElasticSearch/" target="_blank">
+                                <span class="chip bg-color">ElasticSearch</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fa fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/springboot/" class="post-category" target="_blank">
+                                springboot
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                <div class="post-date info-break-policy">
+                    <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2018-08-28
+                </div>
+
+                
+				
+				
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="fa fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="elasticsearch-Java-High-Level-REST-Client-api"><a href="#elasticsearch-Java-High-Level-REST-Client-api" class="headerlink" title="elasticsearch (Java High Level REST Client) api"></a>elasticsearch (Java High Level REST Client) api</h2><p>Java高级REST客户端在Java低级REST客户端之上工作。它的主要目标是公开API特定的方法，接受请求对象作为参数并返回响应对象，以便客户端自己处理请求编组和响应非编组。</p>
+<p>可以同步或异步调用每个API。同步方法返回响应对象，而名称以async后缀结尾的异步方法需要一旦收到响应或错误就通知（在由低级客户端管理的线程池上）的侦听器参数。</p>
+<p>Java高级REST客户端依赖于Elasticsearch核心项目。它接受与the相同的请求参数，TransportClient并返回相同的响应对象。</p>
+<h2 id="兼容性"><a href="#兼容性" class="headerlink" title="兼容性"></a>兼容性</h2><p>Java高级REST客户端需要Java 1.8并依赖于Elasticsearch核心项目。客户端版本与客户端开发的Elasticsearch版本相同。它接受与the相同的请求参数，TransportClient 并返回相同的响应对象</p>
+<h2 id="代码初始化方式"><a href="#代码初始化方式" class="headerlink" title="代码初始化方式"></a>代码初始化方式</h2><pre class=" language-java"><code class="language-java">RestHighLevelClient client <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">RestHighLevelClient</span><span class="token punctuation">(</span>
+        RestClient<span class="token punctuation">.</span><span class="token function">builder</span><span class="token punctuation">(</span>
+                <span class="token keyword">new</span> <span class="token class-name">HttpHost</span><span class="token punctuation">(</span><span class="token string">"localhost"</span><span class="token punctuation">,</span> <span class="token number">9200</span><span class="token punctuation">,</span> <span class="token string">"http"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                <span class="token keyword">new</span> <span class="token class-name">HttpHost</span><span class="token punctuation">(</span><span class="token string">"localhost"</span><span class="token punctuation">,</span> <span class="token number">9201</span><span class="token punctuation">,</span> <span class="token string">"http"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>IDE新建SpringBoot项目<br>pom.xml配置</p>
+<pre class=" language-java"><code class="language-java">  <span class="token operator">&lt;</span>dependency<span class="token operator">></span>
+            <span class="token operator">&lt;</span>groupId<span class="token operator">></span>org<span class="token punctuation">.</span>elasticsearch<span class="token operator">&lt;</span><span class="token operator">/</span>groupId<span class="token operator">></span>
+            <span class="token operator">&lt;</span>artifactId<span class="token operator">></span>elasticsearch<span class="token operator">&lt;</span><span class="token operator">/</span>artifactId<span class="token operator">></span>
+            <span class="token operator">&lt;</span>version<span class="token operator">></span><span class="token number">6.2</span><span class="token punctuation">.</span><span class="token number">3</span><span class="token operator">&lt;</span><span class="token operator">/</span>version<span class="token operator">></span>
+        <span class="token operator">&lt;</span><span class="token operator">/</span>dependency<span class="token operator">></span>
+        <span class="token operator">&lt;</span>dependency<span class="token operator">></span>
+            <span class="token operator">&lt;</span>groupId<span class="token operator">></span>org<span class="token punctuation">.</span>elasticsearch<span class="token punctuation">.</span>client<span class="token operator">&lt;</span><span class="token operator">/</span>groupId<span class="token operator">></span>
+            <span class="token operator">&lt;</span>artifactId<span class="token operator">></span>elasticsearch<span class="token operator">-</span>rest<span class="token operator">-</span>high<span class="token operator">-</span>level<span class="token operator">-</span>client<span class="token operator">&lt;</span><span class="token operator">/</span>artifactId<span class="token operator">></span>
+            <span class="token operator">&lt;</span>version<span class="token operator">></span><span class="token number">6.2</span><span class="token punctuation">.</span><span class="token number">3</span><span class="token operator">&lt;</span><span class="token operator">/</span>version<span class="token operator">></span>
+        <span class="token operator">&lt;</span><span class="token operator">/</span>dependency<span class="token operator">></span>
+        <span class="token operator">&lt;</span>dependency<span class="token operator">></span>
+            <span class="token operator">&lt;</span>groupId<span class="token operator">></span>org<span class="token punctuation">.</span>elasticsearch<span class="token punctuation">.</span>client<span class="token operator">&lt;</span><span class="token operator">/</span>groupId<span class="token operator">></span>
+            <span class="token operator">&lt;</span>artifactId<span class="token operator">></span>elasticsearch<span class="token operator">-</span>rest<span class="token operator">-</span>client<span class="token operator">&lt;</span><span class="token operator">/</span>artifactId<span class="token operator">></span>
+            <span class="token operator">&lt;</span>version<span class="token operator">></span><span class="token number">6.2</span><span class="token punctuation">.</span><span class="token number">3</span><span class="token operator">&lt;</span><span class="token operator">/</span>version<span class="token operator">></span>
+        <span class="token operator">&lt;</span><span class="token operator">/</span>dependency<span class="token operator">></span>
+        <span class="token operator">&lt;</span>dependency<span class="token operator">></span>
+            <span class="token operator">&lt;</span>groupId<span class="token operator">></span>org<span class="token punctuation">.</span>elasticsearch<span class="token punctuation">.</span>client<span class="token operator">&lt;</span><span class="token operator">/</span>groupId<span class="token operator">></span>
+            <span class="token operator">&lt;</span>artifactId<span class="token operator">></span>elasticsearch<span class="token operator">-</span>rest<span class="token operator">-</span>client<span class="token operator">-</span>sniffer<span class="token operator">&lt;</span><span class="token operator">/</span>artifactId<span class="token operator">></span>
+            <span class="token operator">&lt;</span>version<span class="token operator">></span><span class="token number">6.2</span><span class="token punctuation">.</span><span class="token number">3</span><span class="token operator">&lt;</span><span class="token operator">/</span>version<span class="token operator">></span>
+        <span class="token operator">&lt;</span><span class="token operator">/</span>dependency<span class="token operator">></span>
+        <span class="token operator">&lt;</span>dependency<span class="token operator">></span>
+            <span class="token operator">&lt;</span>groupId<span class="token operator">></span>org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>boot<span class="token operator">&lt;</span><span class="token operator">/</span>groupId<span class="token operator">></span>
+            <span class="token operator">&lt;</span>artifactId<span class="token operator">></span>spring<span class="token operator">-</span>boot<span class="token operator">-</span>starter<span class="token operator">-</span>web<span class="token operator">&lt;</span><span class="token operator">/</span>artifactId<span class="token operator">></span>
+        <span class="token operator">&lt;</span><span class="token operator">/</span>dependency<span class="token operator">></span>
+        <span class="token operator">&lt;</span>dependency<span class="token operator">></span>
+            <span class="token operator">&lt;</span>groupId<span class="token operator">></span>com<span class="token punctuation">.</span>alibaba<span class="token operator">&lt;</span><span class="token operator">/</span>groupId<span class="token operator">></span>
+            <span class="token operator">&lt;</span>artifactId<span class="token operator">></span>fastjson<span class="token operator">&lt;</span><span class="token operator">/</span>artifactId<span class="token operator">></span>
+            <span class="token operator">&lt;</span>version<span class="token operator">></span><span class="token number">1.2</span><span class="token punctuation">.</span><span class="token number">16</span><span class="token operator">&lt;</span><span class="token operator">/</span>version<span class="token operator">></span>
+        <span class="token operator">&lt;</span><span class="token operator">/</span>dependency<span class="token operator">></span>
+</code></pre>
+<p>application.properties</p>
+<pre class=" language-bash"><code class="language-bash">server.port<span class="token operator">=</span>80
+server.servlet.context-path<span class="token operator">=</span>/es-boot
+spring.data.elasticsearch.cluster-nodes<span class="token operator">=</span>192.168.1.191:9200
+</code></pre>
+<p>数据配置，进行初始化操作</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">/**
+ *  elasticsearch spring-data 目前支持的最高版本为5.5 所以需要自己注入生成客户端
+ *
+ * 数据配置，进行初始化操作
+ * @author qinxuewu
+ * @version 1.00
+ * @time 28/8/2018下午 5:54
+ */</span>
+<span class="token annotation punctuation">@Configuration</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ESConfiguration</span> <span class="token keyword">implements</span> <span class="token class-name">FactoryBean</span><span class="token operator">&lt;</span>RestHighLevelClient<span class="token operator">></span><span class="token punctuation">,</span> InitializingBean<span class="token punctuation">,</span> DisposableBean <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> Logger LOG <span class="token operator">=</span> LoggerFactory<span class="token punctuation">.</span><span class="token function">getLogger</span><span class="token punctuation">(</span>ESConfiguration<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Value</span><span class="token punctuation">(</span><span class="token string">"${spring.data.elasticsearch.cluster-nodes}"</span><span class="token punctuation">)</span>
+    <span class="token keyword">private</span> String clusterNodes<span class="token punctuation">;</span>
+
+    <span class="token keyword">private</span> RestHighLevelClient restHighLevelClient<span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">/**
+     * 控制Bean的实例化过程
+     *
+     * @return
+     * @throws Exception
+     */</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> RestHighLevelClient <span class="token function">getObject</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> restHighLevelClient<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment" spellcheck="true">/**
+     * 获取接口返回的实例的class
+     *
+     * @return
+     */</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> Class<span class="token operator">&lt;</span><span class="token operator">?</span><span class="token operator">></span> <span class="token function">getObjectType</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> RestHighLevelClient<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">destroy</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>restHighLevelClient <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                restHighLevelClient<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">final</span> Exception e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            LOG<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"Error closing ElasticSearch client: "</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">isSingleton</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">afterPropertiesSet</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span>
+        restHighLevelClient <span class="token operator">=</span> <span class="token function">buildClient</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> RestHighLevelClient <span class="token function">buildClient</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            restHighLevelClient <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">RestHighLevelClient</span><span class="token punctuation">(</span>RestClient<span class="token punctuation">.</span><span class="token function">builder</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">HttpHost</span><span class="token punctuation">(</span>clusterNodes<span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">":"</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> Integer<span class="token punctuation">.</span><span class="token function">parseInt</span><span class="token punctuation">(</span>clusterNodes<span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">":"</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"http"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            LOG<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span>e<span class="token punctuation">.</span><span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> restHighLevelClient<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+
+<span class="token punctuation">}</span>
+
+</code></pre>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Component</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">EsDao</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> Logger LOG <span class="token operator">=</span> LoggerFactory<span class="token punctuation">.</span><span class="token function">getLogger</span><span class="token punctuation">(</span>EsDao<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> RestHighLevelClient client<span class="token punctuation">;</span>
+
+
+    <span class="token comment" spellcheck="true">/**
+     * 判断索引是否存在
+     * @param index 索引(关系型数据库)
+     * @return
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">isIndexExist</span><span class="token punctuation">(</span>String index<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            GetRequest getRequest<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">GetRequest</span><span class="token punctuation">(</span>index<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            getRequest<span class="token punctuation">.</span><span class="token function">fetchSourceContext</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">FetchSourceContext</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            getRequest<span class="token punctuation">.</span><span class="token function">storedFields</span><span class="token punctuation">(</span><span class="token string">"_none_"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">boolean</span> exists <span class="token operator">=</span> client<span class="token punctuation">.</span><span class="token function">exists</span><span class="token punctuation">(</span>getRequest<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> exists<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span><span class="token punctuation">{</span>
+            LOG<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"判断索引是否存在是否存在异常"</span><span class="token punctuation">,</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">/**
+     * 判断索引是否存在
+     * @param index  索引(关系型数据库)
+     * @param type   类型(关系型数据表)
+     * @param id     数据ID
+     * @return
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">isIndexExist</span><span class="token punctuation">(</span>String index<span class="token punctuation">,</span>String type<span class="token punctuation">,</span>String id<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            GetRequest getRequest<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">GetRequest</span><span class="token punctuation">(</span>index<span class="token punctuation">,</span>type<span class="token punctuation">,</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            getRequest<span class="token punctuation">.</span><span class="token function">fetchSourceContext</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">FetchSourceContext</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            getRequest<span class="token punctuation">.</span><span class="token function">storedFields</span><span class="token punctuation">(</span><span class="token string">"_none_"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">boolean</span> exists <span class="token operator">=</span> client<span class="token punctuation">.</span><span class="token function">exists</span><span class="token punctuation">(</span>getRequest<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> exists<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span><span class="token punctuation">{</span>
+            LOG<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"判断索引是否存在是否存在异常"</span><span class="token punctuation">,</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">/**
+     * 创建索引
+     * @param index  索引(关系型数据库)
+     * @param type   类型(关系型数据表)
+     * @param obj    数据源
+     * @return
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">createIndexOne</span><span class="token punctuation">(</span>String index<span class="token punctuation">,</span> String type<span class="token punctuation">,</span> JSONObject obj<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            IndexRequest request <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">IndexRequest</span><span class="token punctuation">(</span>index<span class="token punctuation">,</span> type<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            request<span class="token punctuation">.</span><span class="token function">source</span><span class="token punctuation">(</span>obj<span class="token punctuation">.</span><span class="token function">toJSONString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> XContentType<span class="token punctuation">.</span>JSON<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            client<span class="token punctuation">.</span><span class="token function">index</span><span class="token punctuation">(</span>request<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            LOG<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"创建索引异常"</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+        <span class="token comment" spellcheck="true">/**
+         * 创建索引
+         * @param index  索引(关系型数据库)
+         * @param type   类型(关系型数据表)
+         * @param id     数据ID
+         * @param obj    数据源
+         * @return
+         */</span>
+        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">createIndexOne</span><span class="token punctuation">(</span>String index<span class="token punctuation">,</span> String type<span class="token punctuation">,</span>String id<span class="token punctuation">,</span> JSONObject obj<span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token keyword">try</span> <span class="token punctuation">{</span>
+                IndexRequest request<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">IndexRequest</span><span class="token punctuation">(</span>index<span class="token punctuation">,</span>type<span class="token punctuation">,</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                request<span class="token punctuation">.</span><span class="token function">source</span><span class="token punctuation">(</span>obj<span class="token punctuation">.</span><span class="token function">toJSONString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>XContentType<span class="token punctuation">.</span>JSON<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                client<span class="token punctuation">.</span><span class="token function">index</span><span class="token punctuation">(</span>request<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span><span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span><span class="token punctuation">{</span>
+                LOG<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"创建索引异常"</span><span class="token punctuation">,</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+
+        <span class="token punctuation">}</span>
+
+        <span class="token comment" spellcheck="true">/**
+         * 批量创建索
+         * @param index  索引(关系型数据库)
+         * @param type   类型(关系型数据表)
+         * @param list   数据源
+         */</span>
+        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">bacthIndex</span><span class="token punctuation">(</span>String index<span class="token punctuation">,</span> String type<span class="token punctuation">,</span>List<span class="token operator">&lt;</span>JSONObject<span class="token operator">></span> list<span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token keyword">try</span> <span class="token punctuation">{</span>
+                List<span class="token operator">&lt;</span>IndexRequest<span class="token operator">></span> requests <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                list<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span>i<span class="token operator">-</span><span class="token operator">></span><span class="token punctuation">{</span>
+                    requests<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token function">generateNewsRequest</span><span class="token punctuation">(</span>index<span class="token punctuation">,</span>type<span class="token punctuation">,</span>i<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                BulkRequest bulkRequest <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BulkRequest</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">for</span> <span class="token punctuation">(</span>IndexRequest indexRequest <span class="token operator">:</span> requests<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    bulkRequest<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>indexRequest<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+                client<span class="token punctuation">.</span><span class="token function">bulk</span><span class="token punctuation">(</span>bulkRequest<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span><span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span><span class="token punctuation">{</span>
+                LOG<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"批量创建索引异常"</span><span class="token punctuation">,</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">public</span> <span class="token keyword">static</span> IndexRequest <span class="token function">generateNewsRequest</span><span class="token punctuation">(</span>String index<span class="token punctuation">,</span> String type<span class="token punctuation">,</span>JSONObject obj<span class="token punctuation">)</span><span class="token punctuation">{</span>
+            IndexRequest indexRequest <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">IndexRequest</span><span class="token punctuation">(</span>index<span class="token punctuation">,</span> type<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            indexRequest<span class="token punctuation">.</span><span class="token function">source</span><span class="token punctuation">(</span>obj<span class="token punctuation">.</span><span class="token function">toJSONString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>XContentType<span class="token punctuation">.</span>JSON<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> indexRequest<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token comment" spellcheck="true">/**
+         * 删除索引
+         * @param index  索引(关系型数据库)
+         * @param type   类型(关系型数据表)
+         * @param id     数据ID
+         * @return
+         */</span>
+        <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">deleteIndex</span><span class="token punctuation">(</span>String index<span class="token punctuation">,</span>String type<span class="token punctuation">,</span>String id<span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token keyword">try</span> <span class="token punctuation">{</span>
+                DeleteRequest request<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">DeleteRequest</span><span class="token punctuation">(</span>index<span class="token punctuation">,</span>type<span class="token punctuation">,</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                client<span class="token punctuation">.</span><span class="token function">delete</span><span class="token punctuation">(</span>request<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span><span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span><span class="token punctuation">{</span>
+                LOG<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"删除索引异常"</span><span class="token punctuation">,</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            <span class="token keyword">return</span>  <span class="token boolean">false</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token comment" spellcheck="true">/**
+         * 修改索引
+         * @param index  索引(关系型数据库)
+         * @param type   类型(关系型数据表)
+         * @param id     数据ID
+         * @param obj    数据源
+         * @return
+         */</span>
+        <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">updateIndex</span><span class="token punctuation">(</span>String index<span class="token punctuation">,</span> String type<span class="token punctuation">,</span>String id<span class="token punctuation">,</span> JSONObject obj<span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token keyword">try</span> <span class="token punctuation">{</span>
+                UpdateRequest updateRequest <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">UpdateRequest</span><span class="token punctuation">(</span>index<span class="token punctuation">,</span>type<span class="token punctuation">,</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                updateRequest<span class="token punctuation">.</span><span class="token function">doc</span><span class="token punctuation">(</span>obj<span class="token punctuation">.</span><span class="token function">toJSONString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>XContentType<span class="token punctuation">.</span>JSON<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                client<span class="token punctuation">.</span><span class="token function">update</span><span class="token punctuation">(</span>updateRequest<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span><span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span><span class="token punctuation">{</span>
+                LOG<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"修改索引异常"</span><span class="token punctuation">,</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            <span class="token keyword">return</span>  <span class="token boolean">false</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token comment" spellcheck="true">/**
+         * 查询单条索引
+         * @param index  索引(关系型数据库)
+         * @param type   类型(关系型数据表)
+         * @param id     数据ID
+         */</span>
+        <span class="token keyword">public</span> GetResponse <span class="token function">findById</span><span class="token punctuation">(</span>String index<span class="token punctuation">,</span> String type<span class="token punctuation">,</span>String id<span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token keyword">try</span> <span class="token punctuation">{</span>
+                GetRequest getRequest<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">GetRequest</span><span class="token punctuation">(</span>index<span class="token punctuation">,</span>type<span class="token punctuation">,</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                GetResponse getResponse <span class="token operator">=</span> client<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>getRequest<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">return</span> getResponse<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                LOG<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"查询单条索引异常"</span><span class="token punctuation">,</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            <span class="token keyword">return</span> null<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token comment" spellcheck="true">/**
+         * 查询单条索引
+         * @param index     索引(关系型数据库)
+         * @param type      类型(关系型数据表)
+         * @param id        数据ID
+         * @param includes  显示字段
+         * @param excludes  排除字段
+         */</span>
+        <span class="token keyword">public</span> GetResponse <span class="token function">findById</span><span class="token punctuation">(</span>String index<span class="token punctuation">,</span> String type<span class="token punctuation">,</span>String id<span class="token punctuation">,</span>String <span class="token punctuation">[</span><span class="token punctuation">]</span> includes<span class="token punctuation">,</span>String <span class="token punctuation">[</span><span class="token punctuation">]</span> excludes<span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token keyword">try</span> <span class="token punctuation">{</span>
+                GetRequest getRequest<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">GetRequest</span><span class="token punctuation">(</span>index<span class="token punctuation">,</span>type<span class="token punctuation">,</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                FetchSourceContext fetchSourceContext <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FetchSourceContext</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">,</span> includes<span class="token punctuation">,</span> excludes<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                getRequest<span class="token punctuation">.</span><span class="token function">fetchSourceContext</span><span class="token punctuation">(</span>fetchSourceContext<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                GetResponse getResponse <span class="token operator">=</span> client<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>getRequest<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">return</span>  getResponse<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                LOG<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"查询单条索引异常"</span><span class="token punctuation">,</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            <span class="token keyword">return</span> null<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token comment" spellcheck="true">/**
+         * 查询列表索引
+         * @param index        索引(关系型数据库)
+         * @param type         类型(关系型数据表)
+         * @return
+         */</span>
+        <span class="token keyword">public</span> SearchResponse <span class="token function">getAllIndex</span><span class="token punctuation">(</span>String index<span class="token punctuation">,</span>String type<span class="token punctuation">)</span><span class="token punctuation">{</span>
+            SearchSourceBuilder sourceBuilder <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SearchSourceBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            SearchRequest searchRequest <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SearchRequest</span><span class="token punctuation">(</span>index<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            searchRequest<span class="token punctuation">.</span><span class="token function">types</span><span class="token punctuation">(</span>type<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            searchRequest<span class="token punctuation">.</span><span class="token function">source</span><span class="token punctuation">(</span>sourceBuilder<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">try</span> <span class="token punctuation">{</span>
+                SearchResponse response <span class="token operator">=</span> client<span class="token punctuation">.</span><span class="token function">search</span><span class="token punctuation">(</span>searchRequest<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">return</span> response<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                LOG<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"查询列表索引异常"</span><span class="token punctuation">,</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            <span class="token keyword">return</span>  null<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">/**
+     * 查询列表索引
+     * @param index        索引(关系型数据库)
+     * @param type         类型(关系型数据表)
+     * @param includes     显示字段
+     * @param excludes     排除字段
+     * @return
+     */</span>
+    <span class="token keyword">public</span> SearchResponse <span class="token function">getAllIndex</span><span class="token punctuation">(</span>String index<span class="token punctuation">,</span> String type<span class="token punctuation">,</span>String <span class="token punctuation">[</span><span class="token punctuation">]</span> includes<span class="token punctuation">,</span>String <span class="token punctuation">[</span><span class="token punctuation">]</span> excludes<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        SearchSourceBuilder sourceBuilder <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SearchSourceBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        sourceBuilder<span class="token punctuation">.</span><span class="token function">fetchSource</span><span class="token punctuation">(</span>includes<span class="token punctuation">,</span>excludes<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        SearchRequest searchRequest <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SearchRequest</span><span class="token punctuation">(</span>index<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        searchRequest<span class="token punctuation">.</span><span class="token function">types</span><span class="token punctuation">(</span>type<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        searchRequest<span class="token punctuation">.</span><span class="token function">source</span><span class="token punctuation">(</span>sourceBuilder<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            SearchResponse response <span class="token operator">=</span> client<span class="token punctuation">.</span><span class="token function">search</span><span class="token punctuation">(</span>searchRequest<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> response<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            LOG<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"查询列表索引异常"</span><span class="token punctuation">,</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span>  null<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+        <span class="token comment" spellcheck="true">/**
+         * 查询列表索引
+         * @param index        索引(关系型数据库)
+         * @param type         类型(关系型数据表)
+         * @param sourceBuilder  查询条件
+         * @return
+         */</span>
+        <span class="token keyword">public</span> SearchResponse <span class="token function">getAllIndex</span><span class="token punctuation">(</span>String index<span class="token punctuation">,</span> String type<span class="token punctuation">,</span> SearchSourceBuilder sourceBuilder<span class="token punctuation">)</span><span class="token punctuation">{</span>
+            SearchRequest searchRequest <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SearchRequest</span><span class="token punctuation">(</span>index<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            searchRequest<span class="token punctuation">.</span><span class="token function">types</span><span class="token punctuation">(</span>type<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            searchRequest<span class="token punctuation">.</span><span class="token function">source</span><span class="token punctuation">(</span>sourceBuilder<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">try</span> <span class="token punctuation">{</span>
+                SearchResponse response <span class="token operator">=</span> client<span class="token punctuation">.</span><span class="token function">search</span><span class="token punctuation">(</span>searchRequest<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">return</span> response<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                LOG<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"查询列表索引异常"</span><span class="token punctuation">,</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            <span class="token keyword">return</span>  null<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><strong>创建索引</strong></p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Autowired</span>
+<span class="token keyword">private</span> RestHighLevelClient client<span class="token punctuation">;</span>
+<span class="token annotation punctuation">@Autowired</span>
+<span class="token keyword">private</span> EsDao esDao<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Test</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">createIndexOne</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            String index<span class="token operator">=</span><span class="token string">"testdb"</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">//必须为小写</span>
+            String type<span class="token operator">=</span><span class="token string">"userinfo"</span><span class="token punctuation">;</span>
+            JSONObject obj<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">JSONObject</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            obj<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"name"</span><span class="token punctuation">,</span><span class="token string">"qxw"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            obj<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"age"</span><span class="token punctuation">,</span><span class="token number">25</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            obj<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"sex"</span><span class="token punctuation">,</span><span class="token string">"男"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            String <span class="token punctuation">[</span><span class="token punctuation">]</span> tags<span class="token operator">=</span><span class="token punctuation">{</span><span class="token string">"标签1"</span><span class="token punctuation">,</span><span class="token string">"标签2"</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+            obj<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"tags"</span><span class="token punctuation">,</span>tags<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            esDao<span class="token punctuation">.</span><span class="token function">createIndexOne</span><span class="token punctuation">(</span>index<span class="token punctuation">,</span>type<span class="token punctuation">,</span>obj<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+</code></pre>
+<p><strong>批量创建索引</strong></p>
+<pre class=" language-java"><code class="language-java">    <span class="token annotation punctuation">@Test</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">bacthIndex</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        String index<span class="token operator">=</span><span class="token string">"testdb"</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">//必须为小写</span>
+        String type<span class="token operator">=</span><span class="token string">"userinfo"</span><span class="token punctuation">;</span>
+        List<span class="token operator">&lt;</span>JSONObject<span class="token operator">></span>  list<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        JSONObject obj<span class="token operator">=</span>null<span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span><span class="token number">10</span> <span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            obj<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">JSONObject</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            obj<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"name"</span><span class="token punctuation">,</span><span class="token string">"qxw"</span><span class="token operator">+</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            obj<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"age"</span><span class="token punctuation">,</span><span class="token number">25</span><span class="token operator">+</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>obj<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        esDao<span class="token punctuation">.</span><span class="token function">bacthIndex</span><span class="token punctuation">(</span>index<span class="token punctuation">,</span>type<span class="token punctuation">,</span>list<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+</code></pre>
+<p><strong>根据ID查询</strong></p>
+<pre class=" language-java"><code class="language-java">    <span class="token annotation punctuation">@Test</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">findById</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        String index<span class="token operator">=</span><span class="token string">"testdb"</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">//必须为小写</span>
+        String type<span class="token operator">=</span><span class="token string">"userinfo"</span><span class="token punctuation">;</span>
+        String id<span class="token operator">=</span><span class="token string">"NWrCg2UBU-HvVB1XZxe1"</span><span class="token punctuation">;</span>
+        String result<span class="token operator">=</span>esDao<span class="token punctuation">.</span><span class="token function">findById</span><span class="token punctuation">(</span>index<span class="token punctuation">,</span>type<span class="token punctuation">,</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"查询结果："</span><span class="token operator">+</span>result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+</code></pre>
+<p><strong>修改操作</strong></p>
+<pre class=" language-java"><code class="language-java">   <span class="token annotation punctuation">@Test</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">update</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        String index<span class="token operator">=</span><span class="token string">"testdb"</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">//必须为小写</span>
+        String type<span class="token operator">=</span><span class="token string">"userinfo"</span><span class="token punctuation">;</span>
+        String id<span class="token operator">=</span><span class="token string">"NWrCg2UBU-HvVB1XZxe1"</span><span class="token punctuation">;</span>
+        JSONObject obj<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">JSONObject</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        obj<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"name"</span><span class="token punctuation">,</span><span class="token string">"xiaoming"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        obj<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"time"</span><span class="token punctuation">,</span><span class="token string">"2018-08-29 00:00:00"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        esDao<span class="token punctuation">.</span><span class="token function">updateIndex</span><span class="token punctuation">(</span>index<span class="token punctuation">,</span>type<span class="token punctuation">,</span>id<span class="token punctuation">,</span>obj<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+</code></pre>
+<p><strong>根据ID查询 指定过滤字段</strong></p>
+<pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">/**
+     * 根据ID查询
+     */</span>
+    <span class="token annotation punctuation">@Test</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">findById</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        String index<span class="token operator">=</span><span class="token string">"testdb"</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">//必须为小写</span>
+        String type<span class="token operator">=</span><span class="token string">"userinfo"</span><span class="token punctuation">;</span>
+        String id<span class="token operator">=</span><span class="token string">"NWrCg2UBU-HvVB1XZxe1"</span><span class="token punctuation">;</span>
+        GetResponse res<span class="token operator">=</span>esDao<span class="token punctuation">.</span><span class="token function">findById</span><span class="token punctuation">(</span>index<span class="token punctuation">,</span>type<span class="token punctuation">,</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"查询结果index："</span><span class="token operator">+</span>res<span class="token punctuation">.</span><span class="token function">getIndex</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"查询结果type："</span><span class="token operator">+</span>res<span class="token punctuation">.</span><span class="token function">getType</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"查询结果id："</span><span class="token operator">+</span>res<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"查询结果source："</span><span class="token operator">+</span>res<span class="token punctuation">.</span><span class="token function">getSource</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token comment" spellcheck="true">/**
+     * 根据ID查询 指定过滤字段
+     */</span>
+    <span class="token annotation punctuation">@Test</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">findByIdexcludes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        String index<span class="token operator">=</span><span class="token string">"testdb"</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">//必须为小写</span>
+        String type<span class="token operator">=</span><span class="token string">"userinfo"</span><span class="token punctuation">;</span>
+        String id<span class="token operator">=</span><span class="token string">"NWrCg2UBU-HvVB1XZxe1"</span><span class="token punctuation">;</span>
+        String <span class="token punctuation">[</span><span class="token punctuation">]</span> includes<span class="token operator">=</span><span class="token punctuation">{</span><span class="token string">"name"</span><span class="token punctuation">,</span><span class="token string">"sex"</span><span class="token punctuation">,</span><span class="token string">"age"</span><span class="token punctuation">}</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//不过滤</span>
+        String <span class="token punctuation">[</span><span class="token punctuation">]</span> excludes<span class="token operator">=</span><span class="token punctuation">{</span><span class="token string">"tags"</span><span class="token punctuation">}</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//过滤字段</span>
+
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"查询结果："</span><span class="token operator">+</span>esDao<span class="token punctuation">.</span><span class="token function">findById</span><span class="token punctuation">(</span>index<span class="token punctuation">,</span>type<span class="token punctuation">,</span>id<span class="token punctuation">,</span>includes<span class="token punctuation">,</span>excludes<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+</code></pre>
+<p><strong>查询所有</strong></p>
+<pre class=" language-java"><code class="language-java"> <span class="token annotation punctuation">@Test</span>
+    <span class="token keyword">public</span>  <span class="token keyword">void</span>  <span class="token function">getAllIndex</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        String index<span class="token operator">=</span><span class="token string">"testdb"</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">//必须为小写</span>
+        String type<span class="token operator">=</span><span class="token string">"userinfo"</span><span class="token punctuation">;</span>
+        String result<span class="token operator">=</span>esDao<span class="token punctuation">.</span><span class="token function">getAllIndex</span><span class="token punctuation">(</span>index<span class="token punctuation">,</span>type<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"查询结果："</span><span class="token operator">+</span>result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        String <span class="token punctuation">[</span><span class="token punctuation">]</span> includes<span class="token operator">=</span><span class="token punctuation">{</span><span class="token string">"name"</span><span class="token punctuation">,</span><span class="token string">"sex"</span><span class="token punctuation">,</span><span class="token punctuation">}</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//不过滤</span>
+        String <span class="token punctuation">[</span><span class="token punctuation">]</span> excludes<span class="token operator">=</span><span class="token punctuation">{</span><span class="token string">"tags"</span><span class="token punctuation">,</span><span class="token string">"age"</span><span class="token punctuation">}</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//过滤字段</span>
+        String result2<span class="token operator">=</span>esDao<span class="token punctuation">.</span><span class="token function">getAllIndex</span><span class="token punctuation">(</span>index<span class="token punctuation">,</span>type<span class="token punctuation">,</span>includes<span class="token punctuation">,</span>excludes<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"指定过滤字段查询结果："</span><span class="token operator">+</span>result2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+</code></pre>
+<p><strong>条件查询 /匹配所有</strong></p>
+<pre class=" language-java"><code class="language-java">    <span class="token annotation punctuation">@Test</span>
+    <span class="token keyword">public</span>  <span class="token keyword">void</span>  <span class="token function">getAllIndexByFiled</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        String index<span class="token operator">=</span><span class="token string">"testdb"</span><span class="token punctuation">;</span>
+        String type<span class="token operator">=</span><span class="token string">"userinfo"</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">/**
+         * 使用QueryBuilder
+         * termQuery("key", obj) 完全匹配
+         * termsQuery("key", obj1, obj2..)   一次匹配多个值
+         * matchQuery("key", Obj) 单个匹配, field不支持通配符, 前缀具高级特性
+         * multiMatchQuery("text", "field1", "field2"..);  匹配多个字段, field有通配符忒行
+         * matchAllQuery();         匹配所有文件
+         */</span>
+
+        <span class="token comment" spellcheck="true">//匹配所有文件</span>
+        SearchSourceBuilder searchSourceBuilder <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SearchSourceBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        searchSourceBuilder<span class="token punctuation">.</span><span class="token function">query</span><span class="token punctuation">(</span>QueryBuilders<span class="token punctuation">.</span><span class="token function">matchAllQuery</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        String result<span class="token operator">=</span>esDao<span class="token punctuation">.</span><span class="token function">getAllIndex</span><span class="token punctuation">(</span>index<span class="token punctuation">,</span>type<span class="token punctuation">,</span>searchSourceBuilder<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"匹配所有查询结果："</span><span class="token operator">+</span>result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+</code></pre>
+<p><strong>模糊、排序查询</strong></p>
+<pre class=" language-java"><code class="language-java">  <span class="token comment" spellcheck="true">/**
+     * 条件查询
+     */</span>
+    <span class="token annotation punctuation">@Test</span>
+    <span class="token keyword">public</span>  <span class="token keyword">void</span>  <span class="token function">getAllIndexByFiled3</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        String index<span class="token operator">=</span><span class="token string">"testdb"</span><span class="token punctuation">;</span>
+        String type<span class="token operator">=</span><span class="token string">"userinfo"</span><span class="token punctuation">;</span>
+
+        SearchSourceBuilder search3 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SearchSourceBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//        MatchQueryBuilder matchQueryBuilder = new MatchQueryBuilder("name","qxw");</span>
+         <span class="token comment" spellcheck="true">//在匹配查询上启用模糊匹配</span>
+<span class="token comment" spellcheck="true">//        matchQueryBuilder.fuzziness(Fuzziness.AUTO);</span>
+<span class="token comment" spellcheck="true">//        //在匹配查询上设置前缀长度选项</span>
+<span class="token comment" spellcheck="true">//        matchQueryBuilder.prefixLength(3); </span>
+<span class="token comment" spellcheck="true">//        //设置最大扩展选项以控制查询的模糊过程</span>
+<span class="token comment" spellcheck="true">//        matchQueryBuilder.maxExpansions(10); </span>
+
+
+        <span class="token comment" spellcheck="true">//默认情况下，搜索请求会返回文档的内容,设置fasle不会返回窝</span>
+<span class="token comment" spellcheck="true">//        search3.fetchSource(false);</span>
+
+        <span class="token comment" spellcheck="true">//也接受一个或多个通配符模式的数组，以控制以更精细的方式包含或排除哪些字段</span>
+        String<span class="token punctuation">[</span><span class="token punctuation">]</span> includeFields <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token punctuation">{</span><span class="token string">"name"</span><span class="token punctuation">,</span> <span class="token string">"age"</span><span class="token punctuation">,</span> <span class="token string">"tags"</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+        String<span class="token punctuation">[</span><span class="token punctuation">]</span> excludeFields <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token punctuation">{</span><span class="token string">"_type"</span><span class="token punctuation">,</span><span class="token string">"_index"</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+        search3<span class="token punctuation">.</span><span class="token function">fetchSource</span><span class="token punctuation">(</span>includeFields<span class="token punctuation">,</span> excludeFields<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">//指定排序</span>
+        search3<span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">FieldSortBuilder</span><span class="token punctuation">(</span><span class="token string">"age"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">order</span><span class="token punctuation">(</span>SortOrder<span class="token punctuation">.</span>DESC<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+
+
+
+         <span class="token comment" spellcheck="true">//启用模糊查询 fuzziness(Fuzziness.AUTO)</span>
+<span class="token comment" spellcheck="true">//        search3.query(QueryBuilders.matchQuery("name","qxw").fuzziness(Fuzziness.AUTO));</span>
+
+        <span class="token comment" spellcheck="true">//模糊查询，?匹配单个字符，*匹配多个字符</span>
+<span class="token comment" spellcheck="true">//        search3.query(QueryBuilders.wildcardQuery("name","*qxw*"));</span>
+
+        <span class="token comment" spellcheck="true">//搜索name中或tags  中包含有qxw的文档（必须与music一致)</span>
+<span class="token comment" spellcheck="true">//        search3.query(QueryBuilders.multiMatchQuery("qxw","name","tags"));</span>
+
+
+
+        <span class="token comment" spellcheck="true">//多条件查询 相当于and</span>
+        BoolQueryBuilder boolQueryBuilder <span class="token operator">=</span> QueryBuilders<span class="token punctuation">.</span><span class="token function">boolQuery</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">//查询age=32</span>
+        TermQueryBuilder termQuery<span class="token operator">=</span>QueryBuilders<span class="token punctuation">.</span><span class="token function">termQuery</span><span class="token punctuation">(</span><span class="token string">"age"</span><span class="token punctuation">,</span><span class="token number">32</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">//匹配多个值  相当于sql 中in(....)操作</span>
+        TermsQueryBuilder termQuerys<span class="token operator">=</span>QueryBuilders<span class="token punctuation">.</span><span class="token function">termsQuery</span><span class="token punctuation">(</span><span class="token string">"_id"</span><span class="token punctuation">,</span><span class="token string">"PWrIg2UBU-HvVB1XzRce"</span><span class="token punctuation">,</span><span class="token string">"XWqYhGUBU-HvVB1Xahct"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">//模糊查询name中包含qxw</span>
+        WildcardQueryBuilder queryBuilder <span class="token operator">=</span> QueryBuilders<span class="token punctuation">.</span><span class="token function">wildcardQuery</span><span class="token punctuation">(</span><span class="token string">"name"</span><span class="token punctuation">,</span> <span class="token string">"*qxw*"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        boolQueryBuilder<span class="token punctuation">.</span><span class="token function">must</span><span class="token punctuation">(</span>termQuery<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        boolQueryBuilder<span class="token punctuation">.</span><span class="token function">must</span><span class="token punctuation">(</span>queryBuilder<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        boolQueryBuilder<span class="token punctuation">.</span><span class="token function">must</span><span class="token punctuation">(</span>termQuerys<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">//        //设置from确定结果索引的选项以开始搜索。默认为0。</span>
+<span class="token comment" spellcheck="true">//        search3.from(0);</span>
+<span class="token comment" spellcheck="true">//        //设置size确定要返回的搜索命中数的选项。默认为10。</span>
+<span class="token comment" spellcheck="true">//        search3.size(1);</span>
+
+        search3<span class="token punctuation">.</span><span class="token function">query</span><span class="token punctuation">(</span>boolQueryBuilder<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        SearchResponse result<span class="token operator">=</span>esDao<span class="token punctuation">.</span><span class="token function">getAllIndex</span><span class="token punctuation">(</span>index<span class="token punctuation">,</span>type<span class="token punctuation">,</span>search3<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">//解析SearchHits</span>
+        SearchHits hits <span class="token operator">=</span> result<span class="token punctuation">.</span><span class="token function">getHits</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">long</span> totalHits <span class="token operator">=</span> hits<span class="token punctuation">.</span><span class="token function">getTotalHits</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">float</span> maxScore <span class="token operator">=</span> hits<span class="token punctuation">.</span><span class="token function">getMaxScore</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        SearchHit<span class="token punctuation">[</span><span class="token punctuation">]</span> searchHits <span class="token operator">=</span> hits<span class="token punctuation">.</span><span class="token function">getHits</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span>SearchHit hit <span class="token operator">:</span> searchHits<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            String indexs <span class="token operator">=</span> hit<span class="token punctuation">.</span><span class="token function">getIndex</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            String types <span class="token operator">=</span> hit<span class="token punctuation">.</span><span class="token function">getType</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            String ids <span class="token operator">=</span> hit<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            String sourceAsString <span class="token operator">=</span> hit<span class="token punctuation">.</span><span class="token function">getSourceAsString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            Map<span class="token operator">&lt;</span>String<span class="token punctuation">,</span> Object<span class="token operator">></span> sourceAsMap <span class="token operator">=</span> hit<span class="token punctuation">.</span><span class="token function">getSourceAsMap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"id ："</span><span class="token operator">+</span>ids<span class="token operator">+</span>sourceAsMap<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"查询结果："</span><span class="token operator">+</span>esDao<span class="token punctuation">.</span><span class="token function">getAllIndex</span><span class="token punctuation">(</span>index<span class="token punctuation">,</span>type<span class="token punctuation">,</span>search3<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+</code></pre>
+<h2 id="聚合操作"><a href="#聚合操作" class="headerlink" title="聚合操作"></a>聚合操作</h2><pre class=" language-java"><code class="language-java"> <span class="token annotation punctuation">@Test</span>
+    <span class="token keyword">public</span>  <span class="token keyword">void</span> <span class="token function">AggregationsTest</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException <span class="token punctuation">{</span>
+          String index<span class="token operator">=</span><span class="token string">"emptydb"</span><span class="token punctuation">;</span>
+          String  type<span class="token operator">=</span><span class="token string">"empty"</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//        List&lt;JSONObject>  list=new ArrayList&lt;>();</span>
+<span class="token comment" spellcheck="true">//        JSONObject obj=new JSONObject();</span>
+<span class="token comment" spellcheck="true">//        obj.put("name","小明"); obj.put("age",25); obj.put("salary",10000); obj.put("detpty","技术部");</span>
+<span class="token comment" spellcheck="true">//        list.add(obj);</span>
+<span class="token comment" spellcheck="true">//</span>
+<span class="token comment" spellcheck="true">//        JSONObject obj2=new JSONObject();</span>
+<span class="token comment" spellcheck="true">//        obj2.put("name","小蛋"); obj2.put("age",22); obj2.put("salary",5000); obj2.put("detpty","技术部");</span>
+<span class="token comment" spellcheck="true">//        list.add(obj2);</span>
+<span class="token comment" spellcheck="true">//</span>
+<span class="token comment" spellcheck="true">//        JSONObject obj3=new JSONObject();</span>
+<span class="token comment" spellcheck="true">//        obj3.put("name","张三"); obj3.put("age",24); obj3.put("salary",300); obj3.put("detpty","销售部");</span>
+<span class="token comment" spellcheck="true">//        list.add(obj3);</span>
+<span class="token comment" spellcheck="true">//</span>
+<span class="token comment" spellcheck="true">//        JSONObject obj4=new JSONObject();</span>
+<span class="token comment" spellcheck="true">//        obj4.put("name","李四"); obj4.put("age",22); obj4.put("salary",4000); obj4.put("detpty","采购部");</span>
+<span class="token comment" spellcheck="true">//        list.add(obj4);</span>
+<span class="token comment" spellcheck="true">//</span>
+<span class="token comment" spellcheck="true">//          //添加测试数据</span>
+<span class="token comment" spellcheck="true">//        esDao.bacthIndex(index,type,list);</span>
+
+
+
+        SearchSourceBuilder searchSourceBuilder <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SearchSourceBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        SearchRequest searchRequest <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SearchRequest</span><span class="token punctuation">(</span>index<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        searchRequest<span class="token punctuation">.</span><span class="token function">types</span><span class="token punctuation">(</span>type<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        searchRequest<span class="token punctuation">.</span><span class="token function">source</span><span class="token punctuation">(</span>searchSourceBuilder<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">//计算所有员工的平均年龄</span>
+        <span class="token comment" spellcheck="true">//terms(查询字段别名).field(分组字段)</span>
+        searchSourceBuilder<span class="token punctuation">.</span><span class="token function">aggregation</span><span class="token punctuation">(</span>AggregationBuilders<span class="token punctuation">.</span><span class="token function">avg</span><span class="token punctuation">(</span><span class="token string">"average_age"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">field</span><span class="token punctuation">(</span><span class="token string">"age"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        SearchResponse res<span class="token operator">=</span>client<span class="token punctuation">.</span><span class="token function">search</span><span class="token punctuation">(</span>searchRequest<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"聚合操作查询结果："</span><span class="token operator">+</span>res<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+
+        Aggregations aggregations <span class="token operator">=</span> res<span class="token punctuation">.</span><span class="token function">getAggregations</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Map<span class="token operator">&lt;</span>String<span class="token punctuation">,</span> Aggregation<span class="token operator">></span> aggregationMap <span class="token operator">=</span> aggregations<span class="token punctuation">.</span><span class="token function">getAsMap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"聚合操作解析："</span><span class="token operator">+</span>aggregationMap<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+</code></pre>
+<p><img src="http://wx1.sinaimg.cn/large/006b7Nxngy1g1eu6ewhl9j30760763yz.jpg" alt="觉得本文不错的话，分享一下给小伙伴吧~"></p>
+
+            </div>
+            <hr>
+
+            
+            <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.88rem;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fa fa-close"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.png" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+
+            <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    <div class="social-share" data-disabled="qzone" data-wechat-qrcode-helper="<p>微信里点“发现”->“扫一扫”二维码便可查看分享。</p>"></div>
+    
+</div>
+
+<script src="/libs/share/js/social-share.min.js"></script>
+
+            <div class="reprint">
+                <p>
+                    <span class="reprint-tip">
+                        <i class="fa fa-exclamation-circle"></i>&nbsp;&nbsp;转载请注明:
+                    </span>
+                    <a href="http://songsimen.github.io" class="b-link-green">mengc</a>
+                    <i class="fa fa-angle-right fa-lg fa-fw text-color"></i>
+                    <a href="/2018/08/28/spring-xi-lie/springboot-ji-cheng-elasticsearch6-2/" class="b-link-green">SpringBoot集成ElasticSearch6.2</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2018/08/28/java/apache-curator-ru-men/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="Zookeeper客户端Curator入门">
+                        
+                        <span class="card-title">Zookeeper客户端Curator入门</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary">Zookeeper客户端（Apache Curator）
+zookeeper自带的客户端是官方提供的，比较底层、使用起来写代码麻烦、不够直接。
+Apache Curator是Apache的开源项目，封装了zookeeper自带的客户端，使用</div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2018-08-28
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/springboot/" class="post-category" target="_blank">
+                                    springboot
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/zookeeper/" target="_blank">
+                        <span class="chip bg-color">zookeeper</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2018/08/27/java/elasticsearch-an-zhuang-ji-java-api-shi-yong/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="ElasticSearch安装及Api使用">
+                        
+                        <span class="card-title">ElasticSearch安装及Api使用</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary">ElasticSearch 简介ElasticSearch是一个高度可扩展的开源搜索引擎并使用REST API，所以您值得拥有。 在本教程中，将介绍开始使用ElasticSearch的一些主要概念。
+下载并运行ElasticSearchEl</div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2018-08-27
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/springboot/" class="post-category" target="_blank">
+                                    springboot
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/ElasticSearch/" target="_blank">
+                        <span class="chip bg-color">ElasticSearch</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+</div>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="fa fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fa fa-list"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            // headingsOffset: -205,
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).slideUp(500);
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).slideDown(500);
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+    
+
+</main>
+
+
+<footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            本站版权归属&copy;<a href="https://blinkfox.github.io/" target="_blank">mengc</a>所有
+
+            
+
+            
+			
+                <br>
+                
+                <span id="busuanzi_container_site_pv">
+                    <i class="fa fa-heart-o"></i>
+                    本站总访问量 <span id="busuanzi_value_site_pv" class="white-color"></span>
+                </span>
+                
+                
+                <span id="busuanzi_container_site_uv">
+                    <i class="fa fa-users"></i>
+                    次,&nbsp;访客数 <span id="busuanzi_value_site_uv" class="white-color"></span> 人.
+                </span>
+                
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+    <a href="mailto:515324804@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fa fa-envelope-open"></i>
+    </a>
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=515324804" class="tooltipped" data-tooltip="QQ联系我: 515324804" data-position="top" data-delay="50">
+        <i class="fa fa-qq"></i>
+    </a>
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fa fa-rss"></i>
+    </a>
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+<!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fa fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字" class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+<!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fa fa-angle-up"></i>
+    </a>
+</div>
+
+
+<script src="/libs/materialize/materialize.min.js"></script>
+<script src="/libs/masonry/masonry.pkgd.min.js"></script>
+<script src="/libs/aos/aos.js"></script>
+<script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+<script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+<script src="/js/matery.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+
+    <script src="/libs/others/clicklove.js"></script>
+
+
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+
+
+</body>
+</html>
